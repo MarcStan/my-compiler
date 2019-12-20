@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace mc
 {
@@ -20,9 +21,15 @@ namespace mc
             }
         }
 
-        private static void Print(SyntaxNode node, string indent = "")
+        private static void Print(SyntaxNode node, string indent = "", bool isLast = true)
         {
+            // ├──
+            // └─
+            // │
+
+            var marker = isLast ? "└─" : "├─";
             Console.Write(indent);
+            Console.Write(marker);
             Console.Write(node.Kind);
 
             if (node is SyntaxToken t && t.Value != null)
@@ -33,10 +40,12 @@ namespace mc
 
             Console.WriteLine();
 
-            indent += "  ";
+            indent += isLast ? "  " : "│ ";
+
+            var last = node.Children.LastOrDefault();
 
             foreach (var c in node.Children)
-                Print(c, indent);
+                Print(c, indent, c == last);
         }
     }
 }

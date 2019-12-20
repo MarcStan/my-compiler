@@ -39,6 +39,9 @@ namespace mc
                 }
             }
 
+            if (expr is ParenthesizedExpressionSyntax p)
+                return EvaluateExpression(p.Expression);
+
             throw new ArgumentException($"Unexpected nod {expr.Kind}");
         }
     }

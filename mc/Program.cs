@@ -12,23 +12,31 @@ namespace mc
 
                 var line = Console.ReadLine();
 
-                var lexer = new Lexer(line);
-                while (true)
-                {
-                    var token = lexer.GetNextToken();
-                    if (token.Kind == SyntaxKind.EndOfFileToken)
-                        break;
+                var parser = new Parser(line);
 
-                    Console.Write($"{token.Kind}: '{token.Text}'");
-                    if (token.Value != null)
-                        Console.Write($"  {token.Value}");
+                var expression = parser.Parse();
 
-                    Console.WriteLine();
-                }
-
-                if (line == "exit")
-                    return;
+                Print(expression);
             }
+        }
+
+        private static void Print(SyntaxNode node, string indent = "")
+        {
+            Console.Write(indent);
+            Console.Write(node.Kind);
+
+            if (node is SyntaxToken t && t.Value != null)
+            {
+                Console.Write(" ");
+                Console.Write(t.Value);
+            }
+
+            Console.WriteLine();
+
+            indent += "  ";
+
+            foreach (var c in node.Children)
+                Print(c, indent);
         }
     }
 }

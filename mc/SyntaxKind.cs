@@ -12,6 +12,8 @@
         OpenParenthesisToken,
         CloseParenthesisToken,
         BadToken,
-        EndOfFileToken
+        EndOfFileToken,
+        NumberExpression,
+        BinaryExpression
     }
 }

@@ -7,17 +7,32 @@ namespace mc
     {
         static void Main(string[] args)
         {
+            bool showTree = false;
             while (true)
             {
                 Console.Write("> ");
 
                 var line = Console.ReadLine();
 
-                var parser = new Parser(line);
+                if (line == "showTree")
+                {
+                    showTree = !showTree;
+                    Console.WriteLine(showTree ? "Showing parse trees." : "Not showing parse trees");
+                    continue;
+                }
+                else if (line == "cls")
+                {
+                    Console.Clear();
+                    continue;
+                }
+                else if (line == "exit")
+                {
+                    break;
+                }
+                var syntaxTree = SyntaxTree.Parse(line);
 
-                var syntaxTree = parser.Parse();
-
-                Print(syntaxTree.Root);
+                if (showTree)
+                    Print(syntaxTree.Root);
 
                 if (syntaxTree.Diagnostics.Any())
                 {

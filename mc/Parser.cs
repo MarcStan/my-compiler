@@ -7,6 +7,7 @@ namespace mc
     {
         private readonly SyntaxToken[] _tokens;
         private int _position;
+        private readonly List<string> _diagnostics = new List<string>();
 
         public Parser(string text)
         {
@@ -25,6 +26,7 @@ namespace mc
             } while (token.Kind != SyntaxKind.EndOfFileToken);
 
             _tokens = tokens.ToArray();
+            _diagnostics.AddRange(lexer.Diagnostics);
         }
 
         private SyntaxToken Peek(int offset)
@@ -38,6 +40,8 @@ namespace mc
         public SyntaxToken Current
             => Peek(0);
 
+        public IReadOnlyList<string> Diagnostics => _diagnostics;
+
         private SyntaxToken GetNextToken()
         {
             var current = Current;
@@ -50,10 +54,18 @@ namespace mc
             if (Current.Kind == kind)
                 return GetNextToken();
 
+            _diagnostics.Add($"Error: Unexpected token <{Current.Kind}>, expected <{kind}>");
             return new SyntaxToken(kind, Current.Position, null, null);
         }
 
-        public ExpressionSyntax Parse()
+        public SyntaxTree Parse()
+        {
+            var expression = ParseExpression();
+            var eof = Match(SyntaxKind.EndOfFileToken);
+            return new SyntaxTree(expression, eof, _diagnostics);
+        }
+
+        private ExpressionSyntax ParseExpression()
         {
             var left = ParsePrimaryExpression();
 

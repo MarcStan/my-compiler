@@ -1,7 +1,10 @@
-﻿namespace mc
+﻿using System.Collections.Generic;
+
+namespace mc
 {
     public class Lexer
     {
+        private readonly List<string> _diagnostics = new List<string>();
         private readonly string _text;
         private int _position;
 
@@ -19,6 +22,8 @@
                 return _text[_position];
             }
         }
+
+        public IReadOnlyList<string> Diagnostics => _diagnostics;
 
         private void Next()
             => _position++;
@@ -68,6 +73,7 @@
             if (Current == ')')
                 return new SyntaxToken(SyntaxKind.CloseParenthesisToken, _position++, ")", null);
 
+            _diagnostics.Add($"Error: bad character input: '{Current}'");
             return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position - 1, 1), null);
         }
     }

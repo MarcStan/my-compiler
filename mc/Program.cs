@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace mc
 {
-    class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
@@ -15,10 +15,21 @@ namespace mc
 
                 var parser = new Parser(line);
 
-                var expression = parser.Parse();
+                var syntaxTree = parser.Parse();
 
-                Print(expression);
+                if (syntaxTree.Diagnostics.Any())
+                    WriteLine(ConsoleColor.Red, string.Join(Environment.NewLine, syntaxTree.Diagnostics));
+
+                Print(syntaxTree.Root);
             }
+        }
+
+        private static void WriteLine(ConsoleColor color, string text)
+        {
+            var old = Console.ForegroundColor;
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ForegroundColor = old;
         }
 
         private static void Print(SyntaxNode node, string indent = "", bool isLast = true)

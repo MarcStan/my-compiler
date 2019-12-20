@@ -62,18 +62,21 @@ namespace CodeAnalysis
                 return new SyntaxToken(SyntaxKind.Whitespace, start, text, null);
             }
 
-            if (Current == '+')
-                return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
-            if (Current == '-')
-                return new SyntaxToken(SyntaxKind.MinusToken, _position++, "-", null);
-            if (Current == '*')
-                return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
-            if (Current == '/')
-                return new SyntaxToken(SyntaxKind.SlashToken, _position++, "/", null);
-            if (Current == '(')
-                return new SyntaxToken(SyntaxKind.OpenParenthesisToken, _position++, "(", null);
-            if (Current == ')')
-                return new SyntaxToken(SyntaxKind.CloseParenthesisToken, _position++, ")", null);
+            switch (Current)
+            {
+                case '+':
+                    return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
+                case '-':
+                    return new SyntaxToken(SyntaxKind.MinusToken, _position++, "-", null);
+                case '*':
+                    return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
+                case '/':
+                    return new SyntaxToken(SyntaxKind.SlashToken, _position++, "/", null);
+                case '(':
+                    return new SyntaxToken(SyntaxKind.OpenParenthesisToken, _position++, "(", null);
+                case ')':
+                    return new SyntaxToken(SyntaxKind.CloseParenthesisToken, _position++, ")", null);
+            }
 
             _diagnostics.Add($"Error: bad character input: '{Current}'");
             return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position - 1, 1), null);

@@ -17,7 +17,7 @@
         CloseParenthesisToken,
 
         // expressions
-        NumberExpression,
+        LiteralExpression,
         BinaryExpression,
         ParenthesizedExpression
     }

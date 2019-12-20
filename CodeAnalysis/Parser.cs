@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CodeAnalysis
 {
-    public class Parser
+    internal class Parser
     {
         private readonly SyntaxToken[] _tokens;
         private int _position;
@@ -49,7 +49,7 @@ namespace CodeAnalysis
             return current;
         }
 
-        private SyntaxToken Match(SyntaxKind kind)
+        private SyntaxToken MatchToken(SyntaxKind kind)
         {
             if (Current.Kind == kind)
                 return GetNextToken();
@@ -65,7 +65,7 @@ namespace CodeAnalysis
         public SyntaxTree Parse()
         {
             var expression = ParseTerm();
-            var eof = Match(SyntaxKind.EndOfFileToken);
+            var eof = MatchToken(SyntaxKind.EndOfFileToken);
             return new SyntaxTree(expression, eof, _diagnostics);
         }
 
@@ -105,11 +105,11 @@ namespace CodeAnalysis
             {
                 var left = GetNextToken();
                 var expression = ParseExpression();
-                var right = Match(SyntaxKind.CloseParenthesisToken);
+                var right = MatchToken(SyntaxKind.CloseParenthesisToken);
                 return new ParenthesizedExpressionSyntax(left, expression, right);
             }
-            var numberToken = Match(SyntaxKind.NumberToken);
-            return new NumberExpressionSyntax(numberToken);
+            var numberToken = MatchToken(SyntaxKind.NumberToken);
+            return new LiteralExpressionSyntax(numberToken);
         }
     }
 }

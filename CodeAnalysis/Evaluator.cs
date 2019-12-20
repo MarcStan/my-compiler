@@ -17,8 +17,8 @@ namespace CodeAnalysis
 
         private int EvaluateExpression(ExpressionSyntax expr)
         {
-            if (expr is NumberExpressionSyntax n)
-                return (int)n.NumberToken.Value;
+            if (expr is LiteralExpressionSyntax n)
+                return (int)n.LiteralToken.Value;
             if (expr is BinaryExpressionSyntax b)
             {
                 var left = EvaluateExpression(b.Left);

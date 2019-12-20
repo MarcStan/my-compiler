@@ -2,7 +2,7 @@
 
 namespace CodeAnalysis
 {
-    public class Lexer
+    internal class Lexer
     {
         private readonly List<string> _diagnostics = new List<string>();
         private readonly string _text;

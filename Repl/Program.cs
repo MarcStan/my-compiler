@@ -58,10 +58,6 @@ namespace Repl
 
         private static void Print(SyntaxNode node, string indent = "", bool isLast = true)
         {
-            // ├──
-            // └─
-            // │
-
             var marker = isLast ? "└─" : "├─";
             Console.Write(indent);
             Console.Write(marker);

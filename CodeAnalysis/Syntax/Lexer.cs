@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CodeAnalysis
+namespace CodeAnalysis.Syntax
 {
     internal class Lexer
     {

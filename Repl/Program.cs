@@ -1,4 +1,5 @@
 ﻿using CodeAnalysis;
+using CodeAnalysis.Syntax;
 using System;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace Repl
 {
     public static class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
             bool showTree = false;
             while (true)

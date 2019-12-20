@@ -1,4 +1,5 @@
-﻿using CodeAnalysis.Nodes;
+﻿using CodeAnalysis.Nodes.Syntax;
+using CodeAnalysis.Syntax;
 using System;
 
 namespace CodeAnalysis

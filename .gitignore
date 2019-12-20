@@ -1,0 +1,17 @@
+*.suo
+*.user
+.vs/
+**/[Bb]in/
+**/[Oo]bj/
+**/[Dd]ebug/
+**/[Rr]elease/
+
+# System file crap
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+#.Net core
+launchSettings.json

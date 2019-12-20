@@ -1,4 +1,4 @@
-﻿namespace mc
+﻿namespace CodeAnalysis
 {
     public enum SyntaxKind
     {

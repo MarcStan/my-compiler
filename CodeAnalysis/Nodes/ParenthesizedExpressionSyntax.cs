@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace mc.Nodes
+namespace CodeAnalysis.Nodes
 {
     public class ParenthesizedExpressionSyntax : ExpressionSyntax
     {

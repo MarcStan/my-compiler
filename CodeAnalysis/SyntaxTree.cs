@@ -1,7 +1,7 @@
-﻿using mc.Nodes;
+﻿using CodeAnalysis.Nodes;
 using System.Collections.Generic;
 
-namespace mc
+namespace CodeAnalysis
 {
     public class SyntaxTree
     {

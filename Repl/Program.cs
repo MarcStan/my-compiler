@@ -1,7 +1,8 @@
-﻿using System;
+﻿using CodeAnalysis;
+using System;
 using System.Linq;
 
-namespace mc
+namespace Repl
 {
     public static class Program
     {

@@ -1,7 +1,7 @@
-﻿using mc.Nodes;
+﻿using CodeAnalysis.Nodes;
 using System;
 
-namespace mc
+namespace CodeAnalysis
 {
     public class Evaluator
     {

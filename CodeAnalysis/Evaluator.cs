@@ -19,6 +19,18 @@ namespace CodeAnalysis
         {
             if (expr is LiteralExpressionSyntax n)
                 return (int)n.LiteralToken.Value;
+
+            if (expr is UnaryExpressionSyntax u)
+            {
+                var operand = EvaluateExpression(u.Operand);
+                if (u.OperatorToken.Kind == SyntaxKind.PlusToken)
+                    return operand;
+                else if (u.OperatorToken.Kind == SyntaxKind.MinusToken)
+                    return -operand;
+
+                throw new ArgumentException($"Unexpected unary operator {u.OperatorToken.Kind}");
+            }
+
             if (expr is BinaryExpressionSyntax b)
             {
                 var left = EvaluateExpression(b.Left);

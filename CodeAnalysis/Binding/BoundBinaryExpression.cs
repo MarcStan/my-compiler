@@ -4,16 +4,16 @@ namespace CodeAnalysis.Binding
 {
     internal class BoundBinaryExpression : BoundExpression
     {
-        public BoundBinaryExpression(BoundExpression left, BoundBinaryOperatorKind operatorKind, BoundExpression right)
+        public BoundBinaryExpression(BoundExpression left, BoundBinaryOperator op, BoundExpression right)
         {
             Left = left;
-            OperatorKind = operatorKind;
+            Operator = op;
             Right = right;
         }
 
         public BoundExpression Left { get; }
 
-        public BoundBinaryOperatorKind OperatorKind { get; }
+        public BoundBinaryOperator Operator { get; }
 
         public BoundExpression Right { get; }
 

@@ -25,7 +25,7 @@ namespace CodeAnalysis
             if (expr is BoundUnaryExpression u)
             {
                 var operand = EvaluateExpression(u.Operand);
-                switch (u.OperatorKind)
+                switch (u.Operator.Kind)
                 {
                     case BoundUnaryOperatorKind.Identity:
                         return (int)operand;
@@ -34,7 +34,7 @@ namespace CodeAnalysis
                     case BoundUnaryOperatorKind.LogicalNegation:
                         return !(bool)operand;
                     default:
-                        throw new ArgumentException($"Unexpected unary operator {u.OperatorKind}");
+                        throw new ArgumentException($"Unexpected unary operator {u.Operator}");
                 }
             }
 
@@ -43,7 +43,7 @@ namespace CodeAnalysis
                 var left = EvaluateExpression(b.Left);
                 var right = EvaluateExpression(b.Right);
 
-                switch (b.OperatorKind)
+                switch (b.Operator.Kind)
                 {
                     case BoundBinaryOperatorKind.Addition:
                         return (int)left + (int)right;
@@ -58,7 +58,7 @@ namespace CodeAnalysis
                     case BoundBinaryOperatorKind.LogicalOr:
                         return (bool)left || (bool)right;
                     default:
-                        throw new ArgumentException($"Unexpected binary operator {b.OperatorKind}");
+                        throw new ArgumentException($"Unexpected binary operator {b.Operator}");
                 }
             }
 

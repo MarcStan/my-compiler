@@ -70,7 +70,7 @@ namespace mc
             var left = ParsePrimaryExpression();
 
             while (Current.Kind == SyntaxKind.PlusToken ||
-                Current.Kind == SyntaxKind.MinusToken)
+                   Current.Kind == SyntaxKind.MinusToken)
             {
                 var operatorToken = GetNextToken();
                 var right = ParsePrimaryExpression();

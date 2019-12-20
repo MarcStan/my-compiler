@@ -43,7 +43,9 @@ namespace mc
                 var length = _position - start;
                 var text = _text.Substring(start, length);
 
-                int.TryParse(text, out int value);
+                if (!int.TryParse(text, out int value))
+                    _diagnostics.Add($"The number '{text}' isn't a valid Int32");
+
                 return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
             }
 

@@ -17,10 +17,18 @@ namespace mc
 
                 var syntaxTree = parser.Parse();
 
-                if (syntaxTree.Diagnostics.Any())
-                    WriteLine(ConsoleColor.Red, string.Join(Environment.NewLine, syntaxTree.Diagnostics));
-
                 Print(syntaxTree.Root);
+
+                if (syntaxTree.Diagnostics.Any())
+                {
+                    WriteLine(ConsoleColor.Red, string.Join(Environment.NewLine, syntaxTree.Diagnostics));
+                }
+                else
+                {
+                    var eval = new Evaluator(syntaxTree.Root);
+                    var result = eval.Evaluate();
+                    Console.WriteLine(result);
+                }
             }
         }
 

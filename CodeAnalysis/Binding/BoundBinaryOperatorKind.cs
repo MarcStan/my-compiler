@@ -7,6 +7,8 @@
         Addition,
         Subtraction,
         Multiplication,
-        Division
+        Division,
+        LogicalAdd,
+        LogicalOr
     }
 }

@@ -4,6 +4,7 @@
     {
         Unknown = 0,
         Identity,
-        Negation
+        Negation,
+        LogicalNegation
     }
 }

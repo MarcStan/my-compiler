@@ -15,6 +15,9 @@
         SlashToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
+        BangToken,
+        AmpersandToken,
+        PipeToken,
 
         // expressions
         LiteralExpression,

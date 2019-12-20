@@ -108,9 +108,9 @@ namespace CodeAnalysis.Syntax
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.TrueKeyword:
                     {
-                        var keyworToken = GetNextToken();
-                        var value = Current.Kind == SyntaxKind.TrueKeyword;
-                        return new LiteralExpressionSyntax(keyworToken, value);
+                        var keywordToken = GetNextToken();
+                        var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
+                        return new LiteralExpressionSyntax(keywordToken, value);
                     }
                 default:
                     var numberToken = MatchToken(SyntaxKind.NumberToken);

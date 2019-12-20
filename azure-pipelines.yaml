@@ -1,0 +1,52 @@
+resources:
+- repo: self
+  clean: true
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+schedules:
+- cron: "0 17 * * Fri"
+  always: true
+  displayName: Weekly build
+  branches:
+    include:
+    - master
+pool:
+  vmImage: 'windows-latest'
+variables:
+  BuildConfiguration: 'Release'
+  PublishProject: Repl
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+steps:
+- checkout: self
+  submodules: true
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    useGlobalJson: true
+
+- task: DotNetCoreCLI@2
+  displayName : Build
+  inputs:
+    projects: '**/*.csproj'
+    arguments: '-c $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish $(PublishProject)'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '$(PublishProject)/$(PublishProject).csproj'
+    arguments: '--no-build -c $(BuildConfiguration) -o $(build.artifactstagingdirectory)'
+    zipAfterPublish: false
+    modifyOutputPath: false
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Artifact'
+  inputs:
+    ArtifactName: '$(PublishProject)'
+    targetPath: '$(build.artifactstagingdirectory)'

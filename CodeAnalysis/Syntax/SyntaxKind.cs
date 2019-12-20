@@ -18,6 +18,8 @@
         BangToken,
         AmpersandToken,
         PipeToken,
+        EqualsEqualsToken,
+        BangEqualsToken,
 
         // expressions
         LiteralExpression,
@@ -28,6 +30,6 @@
         // keyword
         FalseKeyword,
         TrueKeyword,
-        IdentifierToken
+        IdentifierToken,
     }
 }

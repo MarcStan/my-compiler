@@ -95,8 +95,6 @@ namespace CodeAnalysis.Syntax
                     return new SyntaxToken(SyntaxKind.OpenParenthesisToken, _position++, "(", null);
                 case ')':
                     return new SyntaxToken(SyntaxKind.CloseParenthesisToken, _position++, ")", null);
-                case '!':
-                    return new SyntaxToken(SyntaxKind.BangToken, _position++, "!", null);
                 case '&':
                     if (LookAhead == '&')
                         return new SyntaxToken(SyntaxKind.AmpersandToken, _position += 2, "&&", null);
@@ -105,6 +103,15 @@ namespace CodeAnalysis.Syntax
                     if (LookAhead == '|')
                         return new SyntaxToken(SyntaxKind.PipeToken, _position += 2, "&&", null);
                     break;
+                case '=':
+                    if (LookAhead == '=')
+                        return new SyntaxToken(SyntaxKind.EqualsEqualsToken, _position += 2, "==", null);
+                    break;
+                case '!':
+                    if (LookAhead == '=')
+                        return new SyntaxToken(SyntaxKind.BangEqualsToken, _position += 2, "!=", null);
+                    else
+                        return new SyntaxToken(SyntaxKind.BangToken, _position++, "!", null);
             }
 
             _diagnostics.Add($"Error: bad character input: '{Current}'");

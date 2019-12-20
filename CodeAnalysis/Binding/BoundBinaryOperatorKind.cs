@@ -9,6 +9,8 @@
         Multiplication,
         Division,
         LogicalAdd,
-        LogicalOr
+        LogicalOr,
+        Equals,
+        NotEquals
     }
 }

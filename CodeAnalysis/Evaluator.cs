@@ -57,6 +57,10 @@ namespace CodeAnalysis
                         return (bool)left && (bool)right;
                     case BoundBinaryOperatorKind.LogicalOr:
                         return (bool)left || (bool)right;
+                    case BoundBinaryOperatorKind.Equals:
+                        return Equals(left, right);
+                    case BoundBinaryOperatorKind.NotEquals:
+                        return !Equals(left, right);
                     default:
                         throw new ArgumentException($"Unexpected binary operator {b.Operator}");
                 }

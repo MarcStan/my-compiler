@@ -10,7 +10,7 @@ namespace CodeAnalysis.Binding
             Operand = operand;
         }
 
-        public override Type Type => Operand.Type;
+        public override Type Type => Operator.Type;
 
         public override BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
 

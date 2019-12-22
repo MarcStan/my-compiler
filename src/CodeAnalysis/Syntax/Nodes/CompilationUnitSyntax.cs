@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CodeAnalysis.Syntax.Nodes
+﻿namespace CodeAnalysis.Syntax.Nodes
 {
     public sealed class CompilationUnitSyntax : SyntaxNode
     {
@@ -14,13 +12,5 @@ namespace CodeAnalysis.Syntax.Nodes
         public SyntaxToken EndOfFileToken { get; }
 
         public override SyntaxKind Kind => SyntaxKind.CompilationUnit;
-
-        public override IEnumerable<SyntaxNode> Children
-        {
-            get
-            {
-                yield return Statement;
-            }
-        }
     }
 }

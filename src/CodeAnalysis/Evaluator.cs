@@ -23,19 +23,29 @@ namespace CodeAnalysis
             return _lastValue;
         }
 
-        private void EvaluateStatement(BoundStatement statement)
+        private void EvaluateStatement(BoundStatement node)
         {
-            switch (statement.Kind)
+            switch (node.Kind)
             {
                 case BoundNodeKind.BlockStatement:
-                    EvaluateBlockStatement((BoundBlockStatement)statement);
+                    EvaluateBlockStatement((BoundBlockStatement)node);
                     break;
                 case BoundNodeKind.ExpressionStatement:
-                    EvaluateExpressionStatement((BoundExpressionStatement)statement);
+                    EvaluateExpressionStatement((BoundExpressionStatement)node);
+                    break;
+                case BoundNodeKind.VariableDeclaration:
+                    EvaluateVariableDeclaration((BoundVariableDeclaration)node);
                     break;
                 default:
-                    throw new ArgumentException($"Unexpected node {statement.Kind}");
+                    throw new ArgumentException($"Unexpected node {node.Kind}");
             }
+        }
+
+        private void EvaluateVariableDeclaration(BoundVariableDeclaration node)
+        {
+            var value = EvaluateExpression(node.Initializer);
+            _variables[node.Variable] = value;
+            _lastValue = value;
         }
 
         private void EvaluateBlockStatement(BoundBlockStatement statement)

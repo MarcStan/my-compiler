@@ -52,6 +52,10 @@ namespace CodeAnalysis.Syntax
                     return SyntaxKind.TrueKeyword;
                 case "false":
                     return SyntaxKind.FalseKeyword;
+                case "let":
+                    return SyntaxKind.LetKeyword;
+                case "var":
+                    return SyntaxKind.VarKeyword;
                 default:
                     return SyntaxKind.IdentifierToken;
             }
@@ -72,8 +76,12 @@ namespace CodeAnalysis.Syntax
                 SyntaxKind.BangEqualsToken => "!=",
                 SyntaxKind.OpenParenthesisToken => "(",
                 SyntaxKind.CloseParenthesisToken => ")",
+                SyntaxKind.OpenBraceToken => "{",
+                SyntaxKind.CloseBraceToken => "}",
                 SyntaxKind.FalseKeyword => "false",
                 SyntaxKind.TrueKeyword => "true",
+                SyntaxKind.VarKeyword => "var",
+                SyntaxKind.LetKeyword => "let",
                 _ => null
             };
 

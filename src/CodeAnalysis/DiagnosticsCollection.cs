@@ -48,5 +48,8 @@ namespace CodeAnalysis
 
         public void ReportCannotConvert(TextSpan span, Type fromType, Type toType)
             => Report(span, $"Cannot convert type '{fromType}' to '{toType}'.");
+
+        public void ReportCannotAssign(TextSpan span, string name)
+            => Report(span, $"Variable '{name}' is read-only and cannot be assigned to.");
     }
 }

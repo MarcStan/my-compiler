@@ -1,6 +1,4 @@
 ﻿using CodeAnalysis.Text;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CodeAnalysis.Syntax
 {
@@ -21,8 +19,6 @@ namespace CodeAnalysis.Syntax
         public string Text { get; }
 
         public object Value { get; }
-
-        public override IEnumerable<SyntaxNode> Children => Enumerable.Empty<SyntaxNode>();
 
         public override TextSpan Span => new TextSpan(Position, Text?.Length ?? 0);
     }

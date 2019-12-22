@@ -17,7 +17,7 @@ Supported features:
 
 ## Example commands
 
-> \> (a = 5) * 5
+> (a = 5) * 5
 > 
 > 25
 
@@ -28,3 +28,11 @@ Supported features:
 > false || 1 * (3 - 2) == 1
 > 
 > True
+
+> let x = 10
+>
+> 10
+
+> var y = 5
+>
+> 5

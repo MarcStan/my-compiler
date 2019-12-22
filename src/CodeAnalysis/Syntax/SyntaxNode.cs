@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace CodeAnalysis.Syntax
 {
@@ -12,7 +13,32 @@ namespace CodeAnalysis.Syntax
         public virtual TextSpan Span
             => TextSpan.FromBounds(Children.First().Span.Start, Children.Last().Span.End);
 
-        public abstract IEnumerable<SyntaxNode> Children { get; }
+        public IEnumerable<SyntaxNode> Children
+        {
+            get
+            {
+                var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+                foreach (var property in properties)
+                {
+                    if (typeof(SyntaxNode).IsAssignableFrom(property.PropertyType))
+                    {
+                        var child = (SyntaxNode)property.GetValue(this);
+                        if (child != null)
+                            yield return child;
+                    }
+                    else if (typeof(IEnumerable<SyntaxNode>).IsAssignableFrom(property.PropertyType))
+                    {
+                        var children = (IEnumerable<SyntaxNode>)property.GetValue(this);
+                        foreach (var child in children)
+                        {
+                            if (child != null)
+                                yield return child;
+                        }
+                    }
+                }
+            }
+        }
 
         public void WriteTo(TextWriter writer)
             => PrintTree(writer, this);

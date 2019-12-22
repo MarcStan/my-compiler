@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CodeAnalysis.Syntax.Nodes
+﻿namespace CodeAnalysis.Syntax.Nodes
 {
     public sealed class NameExpressionSyntax : ExpressionSyntax
     {
@@ -11,13 +9,5 @@ namespace CodeAnalysis.Syntax.Nodes
 
         public override SyntaxKind Kind => SyntaxKind.NameExpression;
         public SyntaxToken IdentifierToken { get; }
-
-        public override IEnumerable<SyntaxNode> Children
-        {
-            get
-            {
-                yield return IdentifierToken;
-            }
-        }
     }
 }

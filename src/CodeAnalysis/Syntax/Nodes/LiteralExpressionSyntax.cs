@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CodeAnalysis.Syntax.Nodes
+﻿namespace CodeAnalysis.Syntax.Nodes
 {
     public class LiteralExpressionSyntax : ExpressionSyntax
     {
@@ -18,11 +16,6 @@ namespace CodeAnalysis.Syntax.Nodes
         public override SyntaxKind Kind => SyntaxKind.LiteralExpression;
 
         public SyntaxToken LiteralToken { get; }
-
-        public override IEnumerable<SyntaxNode> Children
-        {
-            get { yield return LiteralToken; }
-        }
 
         public object Value { get; }
     }

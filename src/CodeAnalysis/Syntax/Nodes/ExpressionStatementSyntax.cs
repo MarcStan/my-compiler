@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CodeAnalysis.Syntax.Nodes
+﻿namespace CodeAnalysis.Syntax.Nodes
 {
     public sealed class ExpressionStatementSyntax : StatementSyntax
     {
@@ -12,13 +10,5 @@ namespace CodeAnalysis.Syntax.Nodes
         public ExpressionSyntax Expression { get; }
 
         public override SyntaxKind Kind => SyntaxKind.ExpressionStatement;
-
-        public override IEnumerable<SyntaxNode> Children
-        {
-            get
-            {
-                yield return Expression;
-            }
-        }
     }
 }

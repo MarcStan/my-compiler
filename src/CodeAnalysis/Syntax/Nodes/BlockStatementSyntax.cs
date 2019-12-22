@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 
 namespace CodeAnalysis.Syntax.Nodes
 {
@@ -20,16 +19,5 @@ namespace CodeAnalysis.Syntax.Nodes
         public SyntaxToken CloseBraceToken { get; }
 
         public override SyntaxKind Kind => SyntaxKind.BlockStatement;
-
-        public override IEnumerable<SyntaxNode> Children
-        {
-            get
-            {
-                yield return OpenBraceToken;
-                foreach (var s in Statements)
-                    yield return s;
-                yield return CloseBraceToken;
-            }
-        }
     }
 }

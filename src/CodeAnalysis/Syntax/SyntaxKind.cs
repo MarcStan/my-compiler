@@ -33,6 +33,8 @@
         AssignmentExpression,
 
         // keyword
+        LetKeyword,
+        VarKeyword,
         FalseKeyword,
         TrueKeyword,
         IdentifierToken,
@@ -42,6 +44,8 @@
 
         // statements
         BlockStatement,
-        ExpressionStatement
+        ExpressionStatement,
+
+        VariableDeclaration
     }
 }

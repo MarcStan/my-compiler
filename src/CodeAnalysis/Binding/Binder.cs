@@ -22,7 +22,7 @@ namespace CodeAnalysis.Binding
         {
             var parentScope = CreateParentScope(previous);
             var binder = new Binder(parentScope);
-            var exp = binder.BindExpression(syntax.Expression);
+            var exp = binder.BindStatement(syntax.Statement);
             var variables = binder._scope.GetDeclaredVariables();
             var diagnostics = binder.Diagnostics.ToImmutableArray();
 
@@ -51,6 +51,39 @@ namespace CodeAnalysis.Binding
                 default:
                     throw new ArgumentException($"Unexpected syntax {syntax.Kind}");
             }
+        }
+
+        public BoundStatement BindStatement(StatementSyntax syntax)
+        {
+            switch (syntax.Kind)
+            {
+                case SyntaxKind.BlockStatement:
+                    return BindbBlockStatement((BlockStatementSyntax)syntax);
+                case SyntaxKind.ExpressionStatement:
+                    return BindExpressionStatement((ExpressionStatementSyntax)syntax);
+                default:
+                    throw new ArgumentException($"Unexpected syntax {syntax.Kind}");
+            }
+        }
+
+        private BoundStatement BindExpressionStatement(ExpressionStatementSyntax syntax)
+        {
+            var exp = BindExpression(syntax.Expression);
+            return new BoundExpressionStatement(exp);
+        }
+
+        private BoundStatement BindbBlockStatement(BlockStatementSyntax syntax)
+        {
+            var statements = ImmutableArray.CreateBuilder<BoundStatement>();
+            _scope = new BoundScope(_scope);
+
+            foreach (var s in syntax.Statements)
+            {
+                statements.Add(BindStatement(s));
+            }
+
+            _scope = _scope.Parent;
+            return new BoundBlockStatement(statements.ToImmutable());
         }
 
         private static BoundScope CreateParentScope(BoundGlobalScope previous)

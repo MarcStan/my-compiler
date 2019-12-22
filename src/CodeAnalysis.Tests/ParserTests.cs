@@ -1,5 +1,6 @@
 ﻿using CodeAnalysis.Syntax;
 using CodeAnalysis.Syntax.Nodes;
+using FluentAssertions;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -141,7 +142,10 @@ namespace CodeAnalysis.Tests
 
         private ExpressionSyntax ParseExpression(string text)
         {
-            return SyntaxTree.Parse(text).Root.Expression;
+            var statement = SyntaxTree.Parse(text).Root.Statement;
+            statement.Should().BeOfType<ExpressionStatementSyntax>();
+
+            return ((ExpressionStatementSyntax)statement).Expression;
         }
     }
 }

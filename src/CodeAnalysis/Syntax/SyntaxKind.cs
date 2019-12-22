@@ -15,6 +15,8 @@
         SlashToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
+        OpenBraceToken,
+        CloseBraceToken,
         BangToken,
         AmpersandToken,
         PipeToken,
@@ -37,5 +39,9 @@
 
         // nodes
         CompilationUnit,
+
+        // statements
+        BlockStatement,
+        ExpressionStatement
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CodeAnalysis.Syntax;
 using FluentAssertions;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,8 +10,30 @@ namespace CodeAnalysis.Tests
     public class LexerTests
     {
         [Test]
+        public void Ensure_all_tokens_are_tested()
+        {
+            var tokenKinds = Enum.GetValues(typeof(SyntaxKind))
+                .Cast<SyntaxKind>()
+                .Where(k => k.ToString().EndsWith("Keyword") ||
+                            k.ToString().EndsWith("Token"))
+                .ToList();
+
+            var testedTokens = GetTokens()
+                .Concat(GetSeparators())
+                .Select(x => x.kind)
+                .ToList();
+
+            var untested = tokenKinds
+                .Except(testedTokens)
+                .Except(new[] { SyntaxKind.EndOfFileToken, SyntaxKind.BadToken })
+                .ToList();
+
+            untested.Should().BeEmpty();
+        }
+
+        [Test]
         [TestCaseSource(nameof(GetTokenData))]
-        public void TestSingleTokenLexing(SyntaxKind kind, string text)
+        public void Single_token_lexing_should_work(SyntaxKind kind, string text)
         {
             var tokens = SyntaxTree.ParseTokens(text);
 
@@ -23,7 +46,7 @@ namespace CodeAnalysis.Tests
 
         [Test]
         [TestCaseSource(nameof(GetTokenPairData))]
-        public void TestMultiTokenLexing(SyntaxKind kind1, string text1, SyntaxKind kind2, string text2)
+        public void Multi_token_lexing_should_work(SyntaxKind kind1, string text1, SyntaxKind kind2, string text2)
         {
             var tokens = SyntaxTree.ParseTokens(text1 + text2);
 
@@ -39,7 +62,7 @@ namespace CodeAnalysis.Tests
 
         [Test]
         [TestCaseSource(nameof(GetTokenPairWithSeparatorData))]
-        public void TestMultiTokenLexing(SyntaxKind kind1, string text1, SyntaxKind separatorKind, string separatorText, SyntaxKind kind2, string text2)
+        public void Multi_token_lexing_should_work_with_separators(SyntaxKind kind1, string text1, SyntaxKind separatorKind, string separatorText, SyntaxKind kind2, string text2)
         {
             var tokens = SyntaxTree.ParseTokens(text1 + separatorText + text2);
 
@@ -67,27 +90,20 @@ namespace CodeAnalysis.Tests
 
         private static IEnumerable<(SyntaxKind kind, string text)> GetTokens()
         {
-            return new[]
+            var fixedTokens = Enum.GetValues(typeof(SyntaxKind))
+                .Cast<SyntaxKind>()
+                .Select(k => (kind: k, text: SyntaxFacts.GetText(k)))
+                .Where(t => t.text != null);
+
+            var dynamicTokens = new[]
             {
-                (SyntaxKind.PlusToken, "+"),
-                (SyntaxKind.MinusToken, "-"),
-                (SyntaxKind.StarToken, "*"),
-                (SyntaxKind.SlashToken, "/"),
-                (SyntaxKind.BangToken, "!"),
-                (SyntaxKind.EqualsToken, "="),
-                (SyntaxKind.AmpersandToken, "&&"),
-                (SyntaxKind.PipeToken, "||"),
-                (SyntaxKind.EqualsEqualsToken, "=="),
-                (SyntaxKind.BangEqualsToken, "!="),
-                (SyntaxKind.OpenParenthesisToken, "("),
-                (SyntaxKind.CloseParenthesisToken, ")"),
-                (SyntaxKind.FalseKeyword, "false"),
-                (SyntaxKind.TrueKeyword, "true"),
                 (SyntaxKind.NumberToken, "1"),
                 (SyntaxKind.NumberToken, "123"),
                 (SyntaxKind.IdentifierToken, "a"),
                 (SyntaxKind.IdentifierToken, "abc")
             };
+
+            return fixedTokens.Concat(dynamicTokens);
         }
 
         private static IEnumerable<(SyntaxKind kind, string text)> GetSeparators()

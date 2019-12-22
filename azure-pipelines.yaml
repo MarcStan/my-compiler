@@ -32,15 +32,22 @@ steps:
 - task: DotNetCoreCLI@2
   displayName : Build
   inputs:
-    projects: '**/*.csproj'
+    projects: 'src/**/*.csproj'
     arguments: '-c $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: test
+    projects: 'src/**/*Tests/*.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish $(PublishProject)'
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: '$(PublishProject)/$(PublishProject).csproj'
+    projects: 'src/$(PublishProject)/$(PublishProject).csproj'
     arguments: '--no-build -c $(BuildConfiguration) -o $(build.artifactstagingdirectory)'
     zipAfterPublish: false
     modifyOutputPath: false

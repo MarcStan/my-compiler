@@ -16,7 +16,7 @@ namespace CodeAnalysis.Syntax
             var tokens = new List<SyntaxToken>();
             do
             {
-                token = lexer.GetNextToken();
+                token = lexer.Lex();
                 if (token.Kind != SyntaxKind.Whitespace &&
                     token.Kind != SyntaxKind.BadToken)
                 {

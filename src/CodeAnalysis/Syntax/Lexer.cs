@@ -29,7 +29,7 @@
         private void Next()
             => _position++;
 
-        public SyntaxToken GetNextToken()
+        public SyntaxToken Lex()
         {
             if (_position >= _text.Length)
                 return new SyntaxToken(SyntaxKind.EndOfFileToken, _position, "\0", null);
@@ -99,7 +99,7 @@
                     if (LookAhead == '|')
                     {
                         _position += 2;
-                        return new SyntaxToken(SyntaxKind.PipeToken, start, "&&", null);
+                        return new SyntaxToken(SyntaxKind.PipeToken, start, "||", null);
                     }
                     break;
                 case '=':

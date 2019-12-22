@@ -1,6 +1,9 @@
-﻿namespace CodeAnalysis.Syntax
+﻿using System;
+using System.Collections.Generic;
+
+namespace CodeAnalysis.Syntax
 {
-    internal static class SyntaxFacts
+    public static class SyntaxFacts
     {
         public static int GetUnaryOperatorPrecedence(this SyntaxKind kind)
         {
@@ -51,6 +54,46 @@
                     return SyntaxKind.FalseKeyword;
                 default:
                     return SyntaxKind.IdentifierToken;
+            }
+        }
+
+        public static string GetText(SyntaxKind kind)
+            => kind switch
+            {
+                SyntaxKind.PlusToken => "+",
+                SyntaxKind.MinusToken => "-",
+                SyntaxKind.StarToken => "*",
+                SyntaxKind.SlashToken => "/",
+                SyntaxKind.BangToken => "!",
+                SyntaxKind.EqualsToken => "=",
+                SyntaxKind.AmpersandToken => "&&",
+                SyntaxKind.PipeToken => "||",
+                SyntaxKind.EqualsEqualsToken => "==",
+                SyntaxKind.BangEqualsToken => "!=",
+                SyntaxKind.OpenParenthesisToken => "(",
+                SyntaxKind.CloseParenthesisToken => ")",
+                SyntaxKind.FalseKeyword => "false",
+                SyntaxKind.TrueKeyword => "true",
+                _ => null
+            };
+
+        public static IEnumerable<SyntaxKind> GetUnaryOperatorKinds()
+        {
+            var kinds = (SyntaxKind[])Enum.GetValues(typeof(SyntaxKind));
+            foreach (var kind in kinds)
+            {
+                if (GetUnaryOperatorPrecedence(kind) > 0)
+                    yield return kind;
+            }
+        }
+
+        public static IEnumerable<SyntaxKind> GetBinaryOperatorKinds()
+        {
+            var kinds = (SyntaxKind[])Enum.GetValues(typeof(SyntaxKind));
+            foreach (var kind in kinds)
+            {
+                if (GetBinaryOperatorPrecedence(kind) > 0)
+                    yield return kind;
             }
         }
     }

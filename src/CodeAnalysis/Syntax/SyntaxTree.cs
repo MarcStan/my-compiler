@@ -1,24 +1,30 @@
 ﻿using CodeAnalysis.Syntax.Nodes;
+using CodeAnalysis.Text;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
 
 namespace CodeAnalysis.Syntax
 {
     public class SyntaxTree
     {
-        public SyntaxTree(ExpressionSyntax root, SyntaxToken endOfFile, IEnumerable<Diagnostic> diagnostics)
+        public SyntaxTree(SourceText text, ExpressionSyntax root, SyntaxToken endOfFile, ImmutableArray<Diagnostic> diagnostics)
         {
             Root = root;
             EndOfFile = endOfFile;
-            Diagnostics = diagnostics.ToArray();
+            Diagnostics = diagnostics;
+            Text = text;
         }
 
         public SyntaxToken EndOfFile { get; }
 
         public ExpressionSyntax Root { get; }
-        public IReadOnlyList<Diagnostic> Diagnostics { get; }
+        public ImmutableArray<Diagnostic> Diagnostics { get; }
+        public SourceText Text { get; }
 
         public static SyntaxTree Parse(string text)
+            => Parse(SourceText.From(text));
+
+        public static SyntaxTree Parse(SourceText text)
         {
             var parser = new Parser(text);
             var syntaxTree = parser.Parse();
@@ -27,6 +33,9 @@ namespace CodeAnalysis.Syntax
         }
 
         public static IEnumerable<SyntaxToken> ParseTokens(string text)
+            => ParseTokens(SourceText.From(text));
+
+        public static IEnumerable<SyntaxToken> ParseTokens(SourceText text)
         {
             var lexer = new Lexer(text);
             while (true)

@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Immutable;
 
 namespace CodeAnalysis
 {
     public sealed class EvaluationResult
     {
-        public EvaluationResult(IReadOnlyList<Diagnostic> diagnostics, object value)
+        public EvaluationResult(ImmutableArray<Diagnostic> diagnostics, object value)
         {
             Diagnostics = diagnostics;
             Value = value;
         }
 
-        public IReadOnlyList<Diagnostic> Diagnostics { get; }
+        public ImmutableArray<Diagnostic> Diagnostics { get; }
 
         public object Value { get; }
     }

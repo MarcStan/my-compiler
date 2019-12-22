@@ -1,14 +1,17 @@
 ﻿using CodeAnalysis.Syntax.Nodes;
+using CodeAnalysis.Text;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace CodeAnalysis.Syntax
 {
     internal class Parser
     {
-        private readonly SyntaxToken[] _tokens;
+        private readonly ImmutableArray<SyntaxToken> _tokens;
         private int _position;
+        private readonly SourceText _text;
 
-        public Parser(string text)
+        public Parser(SourceText text)
         {
             var lexer = new Lexer(text);
             SyntaxToken token;
@@ -24,8 +27,9 @@ namespace CodeAnalysis.Syntax
                 }
             } while (token.Kind != SyntaxKind.EndOfFileToken);
 
-            _tokens = tokens.ToArray();
+            _tokens = tokens.ToImmutableArray();
             Diagnostics.AddRange(lexer.Diagnostics);
+            _text = text;
         }
 
         private SyntaxToken Peek(int offset)
@@ -61,7 +65,7 @@ namespace CodeAnalysis.Syntax
         {
             var expression = ParseExpression();
             var eof = MatchToken(SyntaxKind.EndOfFileToken);
-            return new SyntaxTree(expression, eof, Diagnostics);
+            return new SyntaxTree(_text, expression, eof, Diagnostics.ToImmutableArray());
         }
 
         private ExpressionSyntax ParseExpression()

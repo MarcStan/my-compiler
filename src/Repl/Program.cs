@@ -1,8 +1,10 @@
 ﻿using CodeAnalysis;
 using CodeAnalysis.Syntax;
+using CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Repl
 {
@@ -12,28 +14,42 @@ namespace Repl
         {
             bool showTree = false;
             var variables = new Dictionary<VariableSymbol, object>();
+            var builder = new StringBuilder();
             while (true)
             {
-                Console.Write("> ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                if (builder.Length == 0)
+                    Console.Write("> ");
+                else
+                    Console.Write("| ");
 
-                var line = Console.ReadLine();
+                Console.ResetColor();
+                var input = Console.ReadLine();
 
-                if (line == "showTree")
+                var isBlank = string.IsNullOrEmpty(input);
+                if (builder.Length == 0)
                 {
-                    showTree = !showTree;
-                    Console.WriteLine(showTree ? "Showing parse trees." : "Not showing parse trees");
+                    if (isBlank)
+                        break;
+                    else if (input == "showTree")
+                    {
+                        showTree = !showTree;
+                        Console.WriteLine(showTree ? "Showing parse trees." : "Not showing parse trees");
+                        continue;
+                    }
+                    else if (input == "cls")
+                    {
+                        Console.Clear();
+                        continue;
+                    }
+                }
+                builder.AppendLine(input);
+                var text = builder.ToString();
+                var syntaxTree = SyntaxTree.Parse(text);
+                if (!isBlank && syntaxTree.Diagnostics.Any())
                     continue;
-                }
-                else if (line == "cls")
-                {
-                    Console.Clear();
-                    continue;
-                }
-                else if (line == "exit")
-                {
-                    break;
-                }
-                var syntaxTree = SyntaxTree.Parse(line);
+
+                builder.Clear();
                 var comp = new Compilation(syntaxTree);
 
                 var result = comp.Evaluate(variables);
@@ -42,12 +58,19 @@ namespace Repl
                     foreach (var diag in result.Diagnostics)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
+                        var lineIndex = syntaxTree.Text.GetLineIndex(diag.Span.Start);
+                        var lineNumber = lineIndex + 1;
+                        var line = syntaxTree.Text.Lines[lineIndex];
+                        var character = diag.Span.Start - line.Start + 1;
+                        Console.Write($"({lineNumber}, {character}): ");
                         Console.WriteLine(diag);
                         Console.ResetColor();
 
-                        var prefix = line.Substring(0, diag.Span.Start);
-                        var error = line.Substring(diag.Span.Start, diag.Span.Length);
-                        var suffix = line.Substring(diag.Span.End);
+                        var prefixSpan = TextSpan.FromBounds(line.Start, diag.Span.Start);
+                        var suffixSpan = TextSpan.FromBounds(diag.Span.End, line.End);
+                        var prefix = syntaxTree.Text.ToString(prefixSpan);
+                        var error = syntaxTree.Text.ToString(diag.Span);
+                        var suffix = syntaxTree.Text.ToString(suffixSpan);
 
                         Console.Write("  ");
                         Console.Write(prefix);
@@ -62,33 +85,11 @@ namespace Repl
                 else
                 {
                     if (showTree)
-                        Print(syntaxTree.Root);
+                        syntaxTree.Root.WriteTo(Console.Out);
 
                     Console.WriteLine(result.Value);
                 }
             }
-        }
-        private static void Print(SyntaxNode node, string indent = "", bool isLast = true)
-        {
-            var marker = isLast ? "└─" : "├─";
-            Console.Write(indent);
-            Console.Write(marker);
-            Console.Write(node.Kind);
-
-            if (node is SyntaxToken t && t.Value != null)
-            {
-                Console.Write(" ");
-                Console.Write(t.Value);
-            }
-
-            Console.WriteLine();
-
-            indent += isLast ? "  " : "│ ";
-
-            var last = node.Children.LastOrDefault();
-
-            foreach (var c in node.Children)
-                Print(c, indent, c == last);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CodeAnalysis.Binding;
 using CodeAnalysis.Syntax;
+using CodeAnalysis.Text;
 using System;
 using System.Collections;
 using System.Collections.Generic;

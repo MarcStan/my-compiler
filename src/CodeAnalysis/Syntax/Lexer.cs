@@ -1,14 +1,16 @@
-﻿namespace CodeAnalysis.Syntax
+﻿using CodeAnalysis.Text;
+
+namespace CodeAnalysis.Syntax
 {
     internal class Lexer
     {
-        private readonly string _text;
+        private readonly SourceText _text;
         private int _position;
         private int _start;
         private SyntaxKind _kind;
         private object _value;
 
-        public Lexer(string text)
+        public Lexer(SourceText text)
         {
             _text = text;
         }
@@ -133,7 +135,7 @@
                     break;
             }
             var length = _position - _start;
-            var text = SyntaxFacts.GetText(_kind) ?? _text.Substring(_start, length);
+            var text = SyntaxFacts.GetText(_kind) ?? _text.ToString(_start, length);
 
             return new SyntaxToken(_kind, _start, text, _value);
         }
@@ -144,7 +146,7 @@
                 _position++;
 
             var length = _position - _start;
-            var text = _text.Substring(_start, length);
+            var text = _text.ToString(_start, length);
 
             _kind = SyntaxFacts.GetKeywordKind(text);
         }
@@ -163,10 +165,10 @@
                 _position++;
 
             var length = _position - _start;
-            var text = _text.Substring(_start, length);
+            var text = _text.ToString(_start, length);
 
             if (!int.TryParse(text, out int value))
-                Diagnostics.ReportInvalidNumber(new TextSpan(_start, length), _text, typeof(int));
+                Diagnostics.ReportInvalidNumber(new TextSpan(_start, length), text, typeof(int));
 
             _value = value;
             _kind = SyntaxKind.NumberToken;

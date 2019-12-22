@@ -1,6 +1,7 @@
 ﻿using CodeAnalysis.Binding;
 using CodeAnalysis.Syntax;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace CodeAnalysis
@@ -21,7 +22,7 @@ namespace CodeAnalysis
 
             var diag = Syntax.Diagnostics
                 .Concat(binder.Diagnostics)
-                .ToArray();
+                .ToImmutableArray();
 
             if (diag.Any())
                 return new EvaluationResult(diag, null);

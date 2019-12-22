@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CodeAnalysis.Text;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CodeAnalysis.Syntax
@@ -23,6 +24,6 @@ namespace CodeAnalysis.Syntax
 
         public override IEnumerable<SyntaxNode> Children => Enumerable.Empty<SyntaxNode>();
 
-        public TextSpan Span => new TextSpan(Position, Text.Length);
+        public override TextSpan Span => new TextSpan(Position, Text?.Length ?? 0);
     }
 }

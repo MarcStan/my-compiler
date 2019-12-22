@@ -2,7 +2,7 @@
 
 namespace CodeAnalysis.Binding
 {
-    internal class BoundLiteralExpression : BoundExpression
+    internal sealed class BoundLiteralExpression : BoundExpression
     {
         public BoundLiteralExpression(object value)
         {

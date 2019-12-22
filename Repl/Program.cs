@@ -1,5 +1,4 @@
 ﻿using CodeAnalysis;
-using CodeAnalysis.Binding;
 using CodeAnalysis.Syntax;
 using System;
 using System.Linq;
@@ -33,25 +32,16 @@ namespace Repl
                     break;
                 }
                 var syntaxTree = SyntaxTree.Parse(line);
-                var binder = new Binder();
-                var boundExpression = binder.BindExpression(syntaxTree.Root);
+                var comp = new Compilation(syntaxTree);
 
-                var diagnostics = syntaxTree.Diagnostics
-                    .Concat(binder.Diagnostics)
-                    .ToArray();
-
-                if (showTree)
-                    Print(syntaxTree.Root);
-
-                if (diagnostics.Any())
+                var result = comp.Evaluate();
+                if (result.Diagnostics.Any())
                 {
-                    WriteLine(ConsoleColor.Red, string.Join(Environment.NewLine, diagnostics));
+                    WriteLine(ConsoleColor.Red, string.Join(Environment.NewLine, result.Diagnostics));
                 }
                 else
                 {
-                    var eval = new Evaluator(boundExpression);
-                    var result = eval.Evaluate();
-                    Console.WriteLine(result);
+                    Console.WriteLine(result.Value);
                 }
             }
         }

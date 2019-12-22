@@ -2,7 +2,7 @@
 
 namespace CodeAnalysis.Binding
 {
-    internal class BoundBinaryExpression : BoundExpression
+    internal sealed class BoundBinaryExpression : BoundExpression
     {
         public BoundBinaryExpression(BoundExpression left, BoundBinaryOperator op, BoundExpression right)
         {
@@ -19,6 +19,6 @@ namespace CodeAnalysis.Binding
 
         public override Type Type => Operator.Type;
 
-        public override BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
+        public override BoundNodeKind Kind => BoundNodeKind.BinaryExpression;
     }
 }

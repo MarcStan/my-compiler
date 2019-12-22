@@ -1,8 +1,6 @@
 ﻿using CodeAnalysis.Binding;
 using System;
-using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Repl")]
 namespace CodeAnalysis
 {
     internal sealed class Evaluator

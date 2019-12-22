@@ -2,7 +2,7 @@
 
 namespace CodeAnalysis.Binding
 {
-    internal class BoundUnaryExpression : BoundExpression
+    internal sealed class BoundUnaryExpression : BoundExpression
     {
         public BoundUnaryExpression(BoundUnaryOperator op, BoundExpression operand)
         {

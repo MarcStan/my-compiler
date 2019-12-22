@@ -61,19 +61,13 @@ namespace Repl
                 }
                 else
                 {
+                    if (showTree)
+                        Print(syntaxTree.Root);
+
                     Console.WriteLine(result.Value);
                 }
             }
         }
-
-        private static void WriteLine(ConsoleColor color, string text)
-        {
-            var old = Console.ForegroundColor;
-            Console.ForegroundColor = color;
-            Console.WriteLine(text);
-            Console.ForegroundColor = old;
-        }
-
         private static void Print(SyntaxNode node, string indent = "", bool isLast = true)
         {
             var marker = isLast ? "└─" : "├─";

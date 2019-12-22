@@ -7,17 +7,18 @@ namespace CodeAnalysis.Syntax
 {
     public class SyntaxTree
     {
-        public SyntaxTree(SourceText text, ExpressionSyntax root, SyntaxToken endOfFile, ImmutableArray<Diagnostic> diagnostics)
+        public SyntaxTree(SourceText text)
         {
-            Root = root;
-            EndOfFile = endOfFile;
-            Diagnostics = diagnostics;
+            var parser = new Parser(text);
+            var root = parser.ParseCompilationUnit();
+            var diagnostics = parser.Diagnostics.ToImmutableArray();
+
             Text = text;
+            Diagnostics = diagnostics;
+            Root = root;
         }
 
-        public SyntaxToken EndOfFile { get; }
-
-        public ExpressionSyntax Root { get; }
+        public CompilationUnitSyntax Root { get; }
         public ImmutableArray<Diagnostic> Diagnostics { get; }
         public SourceText Text { get; }
 
@@ -25,12 +26,7 @@ namespace CodeAnalysis.Syntax
             => Parse(SourceText.From(text));
 
         public static SyntaxTree Parse(SourceText text)
-        {
-            var parser = new Parser(text);
-            var syntaxTree = parser.Parse();
-
-            return syntaxTree;
-        }
+            => new SyntaxTree(text);
 
         public static IEnumerable<SyntaxToken> ParseTokens(string text)
             => ParseTokens(SourceText.From(text));

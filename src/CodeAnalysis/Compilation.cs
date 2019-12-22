@@ -18,7 +18,7 @@ namespace CodeAnalysis
         public EvaluationResult Evaluate(Dictionary<VariableSymbol, object> variables)
         {
             var binder = new Binder(variables);
-            var boundExpression = binder.BindExpression(Syntax.Root);
+            var boundExpression = binder.BindExpression(Syntax.Root.Expression);
 
             var diag = Syntax.Diagnostics
                 .Concat(binder.Diagnostics)

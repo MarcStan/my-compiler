@@ -61,11 +61,11 @@ namespace CodeAnalysis.Syntax
             return new SyntaxToken(kind, Current.Position, null, null);
         }
 
-        public SyntaxTree Parse()
+        public CompilationUnitSyntax ParseCompilationUnit()
         {
             var expression = ParseExpression();
             var eof = MatchToken(SyntaxKind.EndOfFileToken);
-            return new SyntaxTree(_text, expression, eof, Diagnostics.ToImmutableArray());
+            return new CompilationUnitSyntax(expression, eof);
         }
 
         private ExpressionSyntax ParseExpression()

@@ -34,5 +34,8 @@
         FalseKeyword,
         TrueKeyword,
         IdentifierToken,
+
+        // nodes
+        CompilationUnit,
     }
 }

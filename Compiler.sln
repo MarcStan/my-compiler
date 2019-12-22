@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29521.150
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repl", "Repl\Repl.csproj", "{78715ABE-FC6C-4DF1-A3FC-7520CE0ACA3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repl", "src\Repl\Repl.csproj", "{78715ABE-FC6C-4DF1-A3FC-7520CE0ACA3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis", "CodeAnalysis\CodeAnalysis.csproj", "{CE054E22-29AD-466B-BCEF-B7F58615D33A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalysis", "src\CodeAnalysis\CodeAnalysis.csproj", "{CE054E22-29AD-466B-BCEF-B7F58615D33A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Tests", "src\CodeAnalysis.Tests\CodeAnalysis.Tests.csproj", "{DB0E8D8C-5617-413F-964D-6C4E150B4B29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CE054E22-29AD-466B-BCEF-B7F58615D33A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE054E22-29AD-466B-BCEF-B7F58615D33A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE054E22-29AD-466B-BCEF-B7F58615D33A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB0E8D8C-5617-413F-964D-6C4E150B4B29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB0E8D8C-5617-413F-964D-6C4E150B4B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB0E8D8C-5617-413F-964D-6C4E150B4B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB0E8D8C-5617-413F-964D-6C4E150B4B29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

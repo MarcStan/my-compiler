@@ -72,12 +72,12 @@ namespace CodeAnalysis.Syntax
         private ExpressionSyntax ParseAssignmentExpression()
         {
             if (Peek(0).Kind == SyntaxKind.IdentifierToken &&
-               Peek(1).Kind == SyntaxKind.EqualsToken)
+                Peek(1).Kind == SyntaxKind.EqualsToken)
             {
                 var id = GetNextToken();
-                var op = GetNextToken();
+                var eq = GetNextToken();
                 var right = ParseAssignmentExpression();
-                return new AssignmentExpressionSyntax(id, op, right);
+                return new AssignmentExpressionSyntax(id, eq, right);
             }
 
             return ParseBinaryExpression();

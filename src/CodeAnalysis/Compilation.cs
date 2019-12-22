@@ -3,31 +3,54 @@ using CodeAnalysis.Syntax;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
 
 namespace CodeAnalysis
 {
     public sealed class Compilation
     {
-        public Compilation(SyntaxTree syntaxTree)
+        private BoundGlobalScope _globalScope;
+        private readonly Compilation _previous;
+
+        public Compilation(SyntaxTree syntaxTree, Compilation previous)
         {
             Syntax = syntaxTree;
+            _previous = previous;
+        }
+
+        public Compilation(SyntaxTree syntaxTree)
+            : this(syntaxTree, null)
+        {
         }
 
         public SyntaxTree Syntax { get; }
 
+        internal BoundGlobalScope GlobalScope
+        {
+            get
+            {
+                if (_globalScope == null)
+                {
+                    var globalScope = Binder.BindGlobalScope(Syntax.Root, _previous?.GlobalScope);
+                    Interlocked.CompareExchange(ref _globalScope, globalScope, null);
+                }
+                return _globalScope;
+            }
+        }
+
+        public Compilation ContinueWith(SyntaxTree syntaxTree)
+            => new Compilation(syntaxTree, this);
+
         public EvaluationResult Evaluate(Dictionary<VariableSymbol, object> variables)
         {
-            var binder = new Binder(variables);
-            var boundExpression = binder.BindExpression(Syntax.Root.Expression);
-
             var diag = Syntax.Diagnostics
-                .Concat(binder.Diagnostics)
+                .Concat(GlobalScope.Diagnostics)
                 .ToImmutableArray();
 
             if (diag.Any())
                 return new EvaluationResult(diag, null);
 
-            var evaluator = new Evaluator(boundExpression, variables);
+            var evaluator = new Evaluator(GlobalScope.Expression, variables);
             var value = evaluator.Evaluate();
 
             return new EvaluationResult(diag, value);

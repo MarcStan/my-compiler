@@ -42,5 +42,11 @@ namespace CodeAnalysis
 
         public void ReportUndefinedName(TextSpan span, string name)
             => Report(span, $"Variable '{name}' does not exist.");
+
+        public void ReportVariableAlreadyDeclared(TextSpan span, string name)
+            => Report(span, $"Variable '{name}' already declared.");
+
+        public void ReportCannotConvert(TextSpan span, Type fromType, Type toType)
+            => Report(span, $"Cannot convert type '{fromType}' to '{toType}'.");
     }
 }

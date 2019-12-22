@@ -1,4 +1,5 @@
 ﻿using CodeAnalysis.Syntax;
+using CodeAnalysis.Syntax.Nodes;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -17,7 +18,7 @@ namespace CodeAnalysis.Tests
             var op2Text = SyntaxFacts.GetText(op2);
 
             var text = $"a {op1Text} b {op2Text} c";
-            var expression = SyntaxTree.Parse(text).Root;
+            var expression = ParseExpression(text);
 
             if (op1Precedence >= op2Precedence)
             {
@@ -76,7 +77,7 @@ namespace CodeAnalysis.Tests
             var binaryText = SyntaxFacts.GetText(binary);
 
             var text = $"{unaryText} a {binaryText} b";
-            var expression = SyntaxTree.Parse(text).Root;
+            var expression = ParseExpression(text);
 
             if (unaryPrecedence >= binaryPrecedence)
             {
@@ -136,6 +137,11 @@ namespace CodeAnalysis.Tests
                 {
                     yield return new object[] { unary, binary };
                 }
+        }
+
+        private ExpressionSyntax ParseExpression(string text)
+        {
+            return SyntaxTree.Parse(text).Root.Expression;
         }
     }
 }

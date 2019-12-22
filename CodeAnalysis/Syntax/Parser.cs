@@ -7,7 +7,6 @@ namespace CodeAnalysis.Syntax
     {
         private readonly SyntaxToken[] _tokens;
         private int _position;
-        private readonly List<string> _diagnostics = new List<string>();
 
         public Parser(string text)
         {
@@ -26,7 +25,7 @@ namespace CodeAnalysis.Syntax
             } while (token.Kind != SyntaxKind.EndOfFileToken);
 
             _tokens = tokens.ToArray();
-            _diagnostics.AddRange(lexer.Diagnostics);
+            Diagnostics.AddRange(lexer.Diagnostics);
         }
 
         private SyntaxToken Peek(int offset)
@@ -40,7 +39,7 @@ namespace CodeAnalysis.Syntax
         public SyntaxToken Current
             => Peek(0);
 
-        public IReadOnlyList<string> Diagnostics => _diagnostics;
+        public DiagnosticsCollection Diagnostics { get; } = new DiagnosticsCollection();
 
         private SyntaxToken GetNextToken()
         {
@@ -54,7 +53,7 @@ namespace CodeAnalysis.Syntax
             if (Current.Kind == kind)
                 return GetNextToken();
 
-            _diagnostics.Add($"Error: Unexpected token <{Current.Kind}>, expected <{kind}>");
+            Diagnostics.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
             return new SyntaxToken(kind, Current.Position, null, null);
         }
 
@@ -62,7 +61,7 @@ namespace CodeAnalysis.Syntax
         {
             var expression = ParseExpression();
             var eof = MatchToken(SyntaxKind.EndOfFileToken);
-            return new SyntaxTree(expression, eof, _diagnostics);
+            return new SyntaxTree(expression, eof, Diagnostics);
         }
 
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0)
@@ -95,7 +94,7 @@ namespace CodeAnalysis.Syntax
 
         private ExpressionSyntax ParsePrimaryExpression()
         {
-            switch ((Current.Kind))
+            switch (Current.Kind)
             {
                 case SyntaxKind.OpenParenthesisToken:
                     {

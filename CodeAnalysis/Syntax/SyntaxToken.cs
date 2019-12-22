@@ -22,5 +22,7 @@ namespace CodeAnalysis.Syntax
         public object Value { get; }
 
         public override IEnumerable<SyntaxNode> Children => Enumerable.Empty<SyntaxNode>();
+
+        public TextSpan Span => new TextSpan(Position, Text.Length);
     }
 }

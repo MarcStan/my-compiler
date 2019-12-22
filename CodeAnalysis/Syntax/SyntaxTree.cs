@@ -1,21 +1,22 @@
 ﻿using CodeAnalysis.Nodes.Syntax;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CodeAnalysis.Syntax
 {
     public class SyntaxTree
     {
-        public SyntaxTree(ExpressionSyntax root, SyntaxToken endOfFile, IReadOnlyList<string> diagnostics)
+        public SyntaxTree(ExpressionSyntax root, SyntaxToken endOfFile, IEnumerable<Diagnostic> diagnostics)
         {
             Root = root;
             EndOfFile = endOfFile;
-            Diagnostics = diagnostics;
+            Diagnostics = diagnostics.ToArray();
         }
 
         public SyntaxToken EndOfFile { get; }
 
         public ExpressionSyntax Root { get; }
-        public IReadOnlyList<string> Diagnostics { get; }
+        public IReadOnlyList<Diagnostic> Diagnostics { get; }
 
         public static SyntaxTree Parse(string text)
         {

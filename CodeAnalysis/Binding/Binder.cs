@@ -1,15 +1,12 @@
 ﻿using CodeAnalysis.Nodes.Syntax;
 using CodeAnalysis.Syntax;
 using System;
-using System.Collections.Generic;
 
 namespace CodeAnalysis.Binding
 {
     internal sealed class Binder
     {
-        private readonly List<string> _diagnostics = new List<string>();
-
-        public IReadOnlyList<string> Diagnostics => _diagnostics;
+        public DiagnosticsCollection Diagnostics { get; } = new DiagnosticsCollection();
 
         public BoundExpression BindExpression(ExpressionSyntax syntax)
         {
@@ -35,7 +32,7 @@ namespace CodeAnalysis.Binding
             var boundOperatorKind = BoundBinaryOperator.Bind(syntax.OperatorToken.Kind, boundLeft.Type, boundRight.Type);
             if (boundOperatorKind == null)
             {
-                _diagnostics.Add($"Binary operator '{syntax.OperatorToken.Text}' is not defined for types {boundLeft.Type} and {boundRight.Type}");
+                Diagnostics.ReportUndefinedBiaryOperator(syntax.OperatorToken.Span, syntax.OperatorToken.Text, boundLeft.Type, boundRight.Type);
             }
             return new BoundBinaryExpression(boundLeft, boundOperatorKind, boundRight);
         }
@@ -46,7 +43,7 @@ namespace CodeAnalysis.Binding
             var boundOperatorKind = BoundUnaryOperator.Bind(syntax.OperatorToken.Kind, boundOperand.Type);
             if (boundOperatorKind == null)
             {
-                _diagnostics.Add($"Unary operator '{syntax.OperatorToken.Text}' is not defined for type {boundOperand.Type}");
+                Diagnostics.ReportUndefinedUnaryOperator(syntax.OperatorToken.Span, syntax.OperatorToken.Text, boundOperand.Kind);
                 return boundOperand;
             }
             return new BoundUnaryExpression(boundOperatorKind, boundOperand);

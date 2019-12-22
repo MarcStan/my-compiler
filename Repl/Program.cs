@@ -37,7 +37,25 @@ namespace Repl
                 var result = comp.Evaluate();
                 if (result.Diagnostics.Any())
                 {
-                    WriteLine(ConsoleColor.Red, string.Join(Environment.NewLine, result.Diagnostics));
+                    foreach (var diag in result.Diagnostics)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(diag);
+                        Console.ResetColor();
+
+                        var prefix = line.Substring(0, diag.Span.Start);
+                        var error = line.Substring(diag.Span.Start, diag.Span.Length);
+                        var suffix = line.Substring(diag.Span.End);
+
+                        Console.Write("  ");
+                        Console.Write(prefix);
+
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.Write(error);
+                        Console.ResetColor();
+
+                        Console.WriteLine(suffix);
+                    }
                 }
                 else
                 {

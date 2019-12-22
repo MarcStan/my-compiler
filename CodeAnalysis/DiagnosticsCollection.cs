@@ -38,5 +38,8 @@ namespace CodeAnalysis
 
         public void ReportUndefinedBiaryOperator(TextSpan span, string operandText, Type leftType, Type rightType)
             => Report(span, $"Binary operator '{operandText}' is not defined for types {leftType} and {rightType}");
+
+        public void ReportUndefinedName(TextSpan span, string name)
+            => Report(span, $"Variable '{name}' does not exist.");
     }
 }

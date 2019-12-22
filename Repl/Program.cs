@@ -1,6 +1,7 @@
 ﻿using CodeAnalysis;
 using CodeAnalysis.Syntax;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Repl
@@ -10,6 +11,7 @@ namespace Repl
         public static void Main()
         {
             bool showTree = false;
+            var variables = new Dictionary<string, object>();
             while (true)
             {
                 Console.Write("> ");
@@ -34,7 +36,7 @@ namespace Repl
                 var syntaxTree = SyntaxTree.Parse(line);
                 var comp = new Compilation(syntaxTree);
 
-                var result = comp.Evaluate();
+                var result = comp.Evaluate(variables);
                 if (result.Diagnostics.Any())
                 {
                     foreach (var diag in result.Diagnostics)

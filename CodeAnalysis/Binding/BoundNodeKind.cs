@@ -5,6 +5,8 @@
         Unknown = 0,
         UnaryExpression,
         BinaryExpression,
-        LiteralExpression
+        LiteralExpression,
+        VariableExpression,
+        AssignmentExpression
     }
 }

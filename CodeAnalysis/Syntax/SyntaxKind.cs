@@ -18,14 +18,17 @@
         BangToken,
         AmpersandToken,
         PipeToken,
+        EqualsToken,
         EqualsEqualsToken,
         BangEqualsToken,
 
         // expressions
         LiteralExpression,
+        NameExpression,
         UnaryExpression,
         BinaryExpression,
         ParenthesizedExpression,
+        AssignmentExpression,
 
         // keyword
         FalseKeyword,

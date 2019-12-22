@@ -64,7 +64,26 @@ namespace CodeAnalysis.Syntax
             return new SyntaxTree(expression, eof, Diagnostics);
         }
 
-        private ExpressionSyntax ParseExpression(int parentPrecedence = 0)
+        private ExpressionSyntax ParseExpression()
+        {
+            return ParseAssignmentExpression();
+        }
+
+        private ExpressionSyntax ParseAssignmentExpression()
+        {
+            if (Peek(0).Kind == SyntaxKind.IdentifierToken &&
+               Peek(1).Kind == SyntaxKind.EqualsToken)
+            {
+                var id = GetNextToken();
+                var op = GetNextToken();
+                var right = ParseAssignmentExpression();
+                return new AssignmentExpressionSyntax(id, op, right);
+            }
+
+            return ParseBinaryExpression();
+        }
+
+        private ExpressionSyntax ParseBinaryExpression(int parentPrecedence = 0)
         {
             ExpressionSyntax left;
             var unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
@@ -72,7 +91,7 @@ namespace CodeAnalysis.Syntax
             if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence)
             {
                 var operatorToken = GetNextToken();
-                var operand = ParseExpression(unaryOperatorPrecedence);
+                var operand = ParseBinaryExpression(unaryOperatorPrecedence);
                 left = new UnaryExpressionSyntax(operatorToken, operand);
             }
             else
@@ -86,7 +105,7 @@ namespace CodeAnalysis.Syntax
                     break;
 
                 var operatorToken = GetNextToken();
-                var right = ParseExpression(precedence);
+                var right = ParseBinaryExpression(precedence);
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
             return left;
@@ -99,7 +118,7 @@ namespace CodeAnalysis.Syntax
                 case SyntaxKind.OpenParenthesisToken:
                     {
                         var left = GetNextToken();
-                        var expression = ParseExpression();
+                        var expression = ParseBinaryExpression();
                         var right = MatchToken(SyntaxKind.CloseParenthesisToken);
                         return new ParenthesizedExpressionSyntax(left, expression, right);
                     }
@@ -111,6 +130,10 @@ namespace CodeAnalysis.Syntax
                         var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
                         return new LiteralExpressionSyntax(keywordToken, value);
                     }
+
+                case SyntaxKind.IdentifierToken:
+                    var id = GetNextToken();
+                    return new NameExpressionSyntax(id);
                 default:
                     var numberToken = MatchToken(SyntaxKind.NumberToken);
                     return new LiteralExpressionSyntax(numberToken);

@@ -1,5 +1,6 @@
 ﻿using CodeAnalysis.Binding;
 using CodeAnalysis.Syntax;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CodeAnalysis
@@ -13,9 +14,9 @@ namespace CodeAnalysis
 
         public SyntaxTree Syntax { get; }
 
-        public EvaluationResult Evaluate()
+        public EvaluationResult Evaluate(Dictionary<string, object> variables)
         {
-            var binder = new Binder();
+            var binder = new Binder(variables);
             var boundExpression = binder.BindExpression(Syntax.Root);
 
             var diag = Syntax.Diagnostics
@@ -25,7 +26,7 @@ namespace CodeAnalysis
             if (diag.Any())
                 return new EvaluationResult(diag, null);
 
-            var evaluator = new Evaluator(boundExpression);
+            var evaluator = new Evaluator(boundExpression, variables);
             var value = evaluator.Evaluate();
 
             return new EvaluationResult(diag, value);

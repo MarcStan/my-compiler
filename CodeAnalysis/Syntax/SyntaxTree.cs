@@ -1,4 +1,4 @@
-﻿using CodeAnalysis.Nodes.Syntax;
+﻿using CodeAnalysis.Syntax.Nodes;
 using System.Collections.Generic;
 using System.Linq;
 

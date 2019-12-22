@@ -1,5 +1,5 @@
-﻿using CodeAnalysis.Nodes.Syntax;
-using CodeAnalysis.Syntax;
+﻿using CodeAnalysis.Syntax;
+using CodeAnalysis.Syntax.Nodes;
 using System;
 
 namespace CodeAnalysis.Binding

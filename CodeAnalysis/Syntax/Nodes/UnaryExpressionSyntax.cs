@@ -1,7 +1,6 @@
-﻿using CodeAnalysis.Syntax;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace CodeAnalysis.Nodes.Syntax
+namespace CodeAnalysis.Syntax.Nodes
 {
     public class UnaryExpressionSyntax : ExpressionSyntax
     {

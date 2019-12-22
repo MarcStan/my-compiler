@@ -1,6 +1,4 @@
-﻿using CodeAnalysis.Syntax;
-
-namespace CodeAnalysis.Nodes.Syntax
+﻿namespace CodeAnalysis.Syntax.Nodes
 {
     public abstract class ExpressionSyntax : SyntaxNode
     {

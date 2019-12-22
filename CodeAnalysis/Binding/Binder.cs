@@ -2,6 +2,7 @@
 using CodeAnalysis.Syntax.Nodes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CodeAnalysis.Binding
 {
@@ -9,9 +10,9 @@ namespace CodeAnalysis.Binding
     {
         public DiagnosticsCollection Diagnostics { get; } = new DiagnosticsCollection();
 
-        private readonly Dictionary<string, object> _variables;
+        private readonly Dictionary<VariableSymbol, object> _variables;
 
-        public Binder(Dictionary<string, object> variables)
+        public Binder(Dictionary<VariableSymbol, object> variables)
         {
             _variables = variables;
         }
@@ -41,20 +42,27 @@ namespace CodeAnalysis.Binding
         {
             var name = syntax.IdentifierToken.Text;
             var boundExpression = BindExpression(syntax.Expression);
-            return new BoundAssignmentExpression(name, boundExpression);
+
+            var existingVariable = _variables.Keys.FirstOrDefault(v => v.Name == name);
+            if (existingVariable != null)
+                _variables.Remove(existingVariable);
+            var variable = new VariableSymbol(name, boundExpression.Type);
+            _variables[variable] = null;
+            return new BoundAssignmentExpression(variable, boundExpression);
         }
 
         private BoundExpression BindNameExpression(NameExpressionSyntax syntax)
         {
             var name = syntax.IdentifierToken.Text;
-            if (!_variables.TryGetValue(name, out var value))
+
+            var variable = _variables.Keys.FirstOrDefault(v => v.Name == name);
+            if (variable == null)
             {
                 Diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
                 return new BoundLiteralExpression(0);
             }
 
-            var type = typeof(int);// value?.GetType() ?? typeof(object);
-            return new BoundVariableExpression(name, type);
+            return new BoundVariableExpression(variable);
         }
 
         private BoundExpression BindParenthesizedExpression(ParenthesizedExpressionSyntax syntax)

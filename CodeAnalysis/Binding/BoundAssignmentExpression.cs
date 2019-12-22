@@ -4,9 +4,9 @@ namespace CodeAnalysis.Binding
 {
     internal sealed class BoundAssignmentExpression : BoundExpression
     {
-        public BoundAssignmentExpression(string name, BoundExpression expression)
+        public BoundAssignmentExpression(VariableSymbol variable, BoundExpression expression)
         {
-            Name = name;
+            Variable = variable;
             Expression = expression;
         }
 
@@ -14,7 +14,7 @@ namespace CodeAnalysis.Binding
 
         public override BoundNodeKind Kind => BoundNodeKind.AssignmentExpression;
 
-        public string Name { get; }
+        public VariableSymbol Variable { get; }
         public BoundExpression Expression { get; }
     }
 }

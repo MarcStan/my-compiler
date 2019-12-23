@@ -11,31 +11,32 @@ namespace CodeAnalysis.Syntax
         public abstract SyntaxKind Kind { get; }
 
         public virtual TextSpan Span
-            => TextSpan.FromBounds(Children.First().Span.Start, Children.Last().Span.End);
-
-        public IEnumerable<SyntaxNode> Children
         {
             get
             {
-                var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                var first = GetChildren().First().Span;
+                var last = GetChildren().Last().Span;
+                return TextSpan.FromBounds(first.Start, last.End);
+            }
+        }
 
-                foreach (var property in properties)
+        public IEnumerable<SyntaxNode> GetChildren()
+        {
+            var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var property in properties)
+            {
+                if (typeof(SyntaxNode).IsAssignableFrom(property.PropertyType))
                 {
-                    if (typeof(SyntaxNode).IsAssignableFrom(property.PropertyType))
-                    {
-                        var child = (SyntaxNode)property.GetValue(this);
-                        if (child != null)
-                            yield return child;
-                    }
-                    else if (typeof(IEnumerable<SyntaxNode>).IsAssignableFrom(property.PropertyType))
-                    {
-                        var children = (IEnumerable<SyntaxNode>)property.GetValue(this);
-                        foreach (var child in children)
-                        {
-                            if (child != null)
-                                yield return child;
-                        }
-                    }
+                    var child = (SyntaxNode)property.GetValue(this);
+                    if (child != null)
+                        yield return child;
+                }
+                else if (typeof(IEnumerable<SyntaxNode>).IsAssignableFrom(property.PropertyType))
+                {
+                    var children = (IEnumerable<SyntaxNode>)property.GetValue(this);
+                    foreach (var child in children)
+                        yield return child;
                 }
             }
         }
@@ -69,9 +70,9 @@ namespace CodeAnalysis.Syntax
 
             indent += isLast ? "  " : "│ ";
 
-            var last = node.Children.LastOrDefault();
+            var last = node.GetChildren().LastOrDefault();
 
-            foreach (var c in node.Children)
+            foreach (var c in node.GetChildren())
                 PrintTree(writer, c, indent, c == last);
         }
     }

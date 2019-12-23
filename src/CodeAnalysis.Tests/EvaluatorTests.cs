@@ -1,5 +1,7 @@
 ﻿using CodeAnalysis.Syntax;
+using CodeAnalysis.Tests.Helpers;
 using FluentAssertions;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -46,6 +48,122 @@ namespace CodeAnalysis.Tests
 
             actual.Diagnostics.Should().BeEmpty();
             actual.Value.Should().Be(expected);
+        }
+
+        [Test]
+        public void Variable_declaration_should_report_redeclaration()
+        {
+            var text = @"
+                {
+                    var x = 10
+                    var y = 10
+                    {
+                        var x = 1
+                    }
+                    var [x] = 5
+                }
+            ";
+
+            var diagnostics = @"
+                Variable 'x' already declared.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Test]
+        public void Variable_assignment_should_cause_error()
+        {
+            var text = @"
+                {
+                    let x = 10
+                    x [=] 0
+                }
+            ";
+
+            var diagnostics = @"
+                Variable 'x' is read-only and cannot be assigned to.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Test]
+        public void Variable_assignment_with_changed_type_should_cause_error()
+        {
+            var text = @"
+                {
+                    var x = 10
+                    x = [true]
+                }
+            ";
+
+            var diagnostics = @"
+                Cannot convert type 'System.Boolean' to 'System.Int32'.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Test]
+        public void Unary_operator_on_boolean_is_undefined_and_should_cause_error()
+        {
+            var text = @"[+]true";
+
+            var diagnostics = @"
+                Unary operator '+' is not defined for type 'System.Boolean'.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Test]
+        public void Binary_operator_on_int_and_boolean_is_undefined_and_should_cause_error()
+        {
+            var text = @"10 [*] true";
+
+            var diagnostics = @"
+                Binary operator '*' is not defined for types 'System.Int32' and 'System.Boolean'.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Test]
+        public void Undefined_variable_use_should_report_missing()
+        {
+            var text = @"[x] * 10";
+
+            var diagnostics = @"
+                Variable 'x' does not exist.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        private void AssertDiagnostics(string text, string diagnosticText)
+        {
+            var annotatedText = AnnotatedText.Parse(text);
+            var tree = SyntaxTree.Parse(annotatedText.Text);
+
+            var comp = new Compilation(tree);
+            var result = comp.Evaluate(new Dictionary<VariableSymbol, object>());
+
+            var diagnostics = AnnotatedText.UnindentLines(diagnosticText);
+
+            annotatedText.Spans.Should().HaveCount(diagnostics.Length);
+
+            for (int i = 0; i < diagnostics.Length; i++)
+            {
+                var expectedMessage = diagnostics[i];
+                var actualMessage = result.Diagnostics[i].Message;
+
+                actualMessage.Should().Be(expectedMessage);
+
+                var expected = annotatedText.Spans[i];
+                var actual = result.Diagnostics[i].Span;
+                actual.Should().Be(expected);
+            }
         }
     }
 }

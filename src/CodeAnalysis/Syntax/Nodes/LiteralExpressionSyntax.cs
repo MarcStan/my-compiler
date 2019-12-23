@@ -1,6 +1,6 @@
 ﻿namespace CodeAnalysis.Syntax.Nodes
 {
-    public class LiteralExpressionSyntax : ExpressionSyntax
+    public sealed class LiteralExpressionSyntax : ExpressionSyntax
     {
         public LiteralExpressionSyntax(SyntaxToken literalToken, object value)
         {

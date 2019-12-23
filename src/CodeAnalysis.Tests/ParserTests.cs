@@ -1,5 +1,6 @@
 ﻿using CodeAnalysis.Syntax;
 using CodeAnalysis.Syntax.Nodes;
+using CodeAnalysis.Tests.Helpers;
 using FluentAssertions;
 using NUnit.Framework;
 using System.Collections.Generic;

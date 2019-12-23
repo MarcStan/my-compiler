@@ -4,9 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CodeAnalysis.Tests
+namespace CodeAnalysis.Tests.Helpers
 {
-
     internal sealed class AssertingEnumerator : IDisposable
     {
         private readonly IEnumerator<SyntaxNode> _enumerator;
@@ -26,7 +25,7 @@ namespace CodeAnalysis.Tests
                 var n = stack.Pop();
                 yield return n;
 
-                foreach (var c in n.Children.Reverse())
+                foreach (var c in n.GetChildren().Reverse())
                     stack.Push(c);
             }
         }

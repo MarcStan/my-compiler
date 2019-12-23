@@ -181,7 +181,7 @@ namespace CodeAnalysis.Binding
             var boundOperatorKind = BoundUnaryOperator.Bind(syntax.OperatorToken.Kind, boundOperand.Type);
             if (boundOperatorKind == null)
             {
-                Diagnostics.ReportUndefinedUnaryOperator(syntax.OperatorToken.Span, syntax.OperatorToken.Text, boundOperand.Kind);
+                Diagnostics.ReportUndefinedUnaryOperator(syntax.OperatorToken.Span, syntax.OperatorToken.Text, boundOperand.Type);
                 return boundOperand;
             }
             return new BoundUnaryExpression(boundOperatorKind, boundOperand);

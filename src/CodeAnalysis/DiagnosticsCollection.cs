@@ -34,11 +34,11 @@ namespace CodeAnalysis
         public void ReportUnexpectedToken(TextSpan span, SyntaxKind actual, SyntaxKind expected)
             => Report(span, $"Unexpected token <{actual}>, expected <{expected}>.");
 
-        public void ReportUndefinedUnaryOperator(TextSpan span, string operatorText, BoundNodeKind operandKind)
-            => Report(span, $"Unary operator '{operatorText}' is not defined for type {operandKind}.");
+        public void ReportUndefinedUnaryOperator(TextSpan span, string operatorText, Type operandType)
+            => Report(span, $"Unary operator '{operatorText}' is not defined for type '{operandType}'.");
 
         public void ReportUndefinedBiaryOperator(TextSpan span, string operandText, Type leftType, Type rightType)
-            => Report(span, $"Binary operator '{operandText}' is not defined for types {leftType} and {rightType}");
+            => Report(span, $"Binary operator '{operandText}' is not defined for types '{leftType}' and '{rightType}'.");
 
         public void ReportUndefinedName(TextSpan span, string name)
             => Report(span, $"Variable '{name}' does not exist.");

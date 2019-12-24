@@ -57,6 +57,7 @@ namespace CodeAnalysis.Syntax
                 "let" => SyntaxKind.LetKeyword,
                 "true" => SyntaxKind.TrueKeyword,
                 "var" => SyntaxKind.VarKeyword,
+                "while" => SyntaxKind.WhileKeyword,
                 _ => SyntaxKind.IdentifierToken,
             };
 
@@ -86,6 +87,7 @@ namespace CodeAnalysis.Syntax
                 SyntaxKind.IfKeyword => "if",
                 SyntaxKind.TrueKeyword => "true",
                 SyntaxKind.VarKeyword => "var",
+                SyntaxKind.WhileKeyword => "while",
                 SyntaxKind.LetKeyword => "let",
                 _ => null
             };

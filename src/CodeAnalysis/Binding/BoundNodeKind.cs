@@ -9,6 +9,7 @@
         VariableDeclaration,
         ExpressionStatement,
         IfStatement,
+        WhileStatement,
 
         // expressions
         UnaryExpression,

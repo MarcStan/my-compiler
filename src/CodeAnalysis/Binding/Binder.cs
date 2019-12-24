@@ -59,8 +59,17 @@ namespace CodeAnalysis.Binding
                 SyntaxKind.ExpressionStatement => BindExpressionStatement((ExpressionStatementSyntax)syntax),
                 SyntaxKind.IfStatement => BindIfStatement((IfStatementSyntax)syntax),
                 SyntaxKind.VariableDeclaration => BindVariableDeclaration((VariableDeclarationSyntax)syntax),
+                SyntaxKind.WhileStatement => BindWhileStatement((WhileStatementSyntax)syntax),
                 _ => throw new ArgumentException($"Unexpected syntax {syntax.Kind}"),
             };
+
+        private BoundStatement BindWhileStatement(WhileStatementSyntax syntax)
+        {
+            var condition = BindExpression(syntax.Condition, typeof(bool));
+            var statement = BindStatement(syntax.Statement);
+
+            return new BoundWhileStatement(condition, statement);
+        }
 
         private BoundStatement BindIfStatement(IfStatementSyntax syntax)
         {

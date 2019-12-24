@@ -32,41 +32,43 @@ namespace CodeAnalysis.Binding
             return new BoundGlobalScope(diagnostics, variables, exp, previous);
         }
 
-        public BoundExpression BindExpression(ExpressionSyntax syntax)
+        public BoundExpression BindExpression(ExpressionSyntax syntax, Type returnType)
         {
-            switch (syntax.Kind)
-            {
-                case SyntaxKind.LiteralExpression:
-                    return BindLiteralExpression((LiteralExpressionSyntax)syntax);
-                case SyntaxKind.UnaryExpression:
-                    return BindUnaryExpression((UnaryExpressionSyntax)syntax);
-                case SyntaxKind.BinaryExpression:
-                    return BindBinaryExpression((BinaryExpressionSyntax)syntax);
-                case SyntaxKind.ParenthesizedExpression:
-                    return BindParenthesizedExpression((ParenthesizedExpressionSyntax)syntax);
-                case SyntaxKind.NameExpression:
-                    return BindNameExpression((NameExpressionSyntax)syntax);
-                case SyntaxKind.AssignmentExpression:
-                    return BindAssignmentExpression((AssignmentExpressionSyntax)syntax);
-                default:
-                    throw new ArgumentException($"Unexpected syntax {syntax.Kind}");
-            }
+            var expr = BindExpression(syntax);
+            if (expr.Type != returnType)
+                Diagnostics.ReportCannotConvert(syntax.Span, expr.Type, returnType);
+            return expr;
         }
 
-        public BoundStatement BindStatement(StatementSyntax syntax)
-        {
-            switch (syntax.Kind)
+        public BoundExpression BindExpression(ExpressionSyntax syntax)
+            => syntax.Kind switch
             {
-                case SyntaxKind.BlockStatement:
-                    return BindbBlockStatement((BlockStatementSyntax)syntax);
-                case SyntaxKind.ExpressionStatement:
-                    return BindExpressionStatement((ExpressionStatementSyntax)syntax);
-                case SyntaxKind.VariableDeclaration:
-                    return BindVariableDeclaration((VariableDeclarationSyntax)syntax);
+                SyntaxKind.LiteralExpression => BindLiteralExpression((LiteralExpressionSyntax)syntax),
+                SyntaxKind.UnaryExpression => BindUnaryExpression((UnaryExpressionSyntax)syntax),
+                SyntaxKind.BinaryExpression => BindBinaryExpression((BinaryExpressionSyntax)syntax),
+                SyntaxKind.ParenthesizedExpression => BindParenthesizedExpression((ParenthesizedExpressionSyntax)syntax),
+                SyntaxKind.NameExpression => BindNameExpression((NameExpressionSyntax)syntax),
+                SyntaxKind.AssignmentExpression => BindAssignmentExpression((AssignmentExpressionSyntax)syntax),
+                _ => throw new ArgumentException($"Unexpected syntax {syntax.Kind}"),
+            };
 
-                default:
-                    throw new ArgumentException($"Unexpected syntax {syntax.Kind}");
-            }
+        public BoundStatement BindStatement(StatementSyntax syntax)
+            => syntax.Kind switch
+            {
+                SyntaxKind.BlockStatement => BindbBlockStatement((BlockStatementSyntax)syntax),
+                SyntaxKind.ExpressionStatement => BindExpressionStatement((ExpressionStatementSyntax)syntax),
+                SyntaxKind.IfStatement => BindIfStatement((IfStatementSyntax)syntax),
+                SyntaxKind.VariableDeclaration => BindVariableDeclaration((VariableDeclarationSyntax)syntax),
+                _ => throw new ArgumentException($"Unexpected syntax {syntax.Kind}"),
+            };
+
+        private BoundStatement BindIfStatement(IfStatementSyntax syntax)
+        {
+            var condition = BindExpression(syntax.Condition, typeof(bool));
+            var thenStatement = BindStatement(syntax.ThenStatement);
+            var elseStatement = syntax.ElseClause == null ? null : BindStatement(syntax.ElseClause.ElseStatement);
+
+            return new BoundIfStatement(condition, thenStatement, elseStatement);
         }
 
         private BoundStatement BindVariableDeclaration(VariableDeclarationSyntax syntax)

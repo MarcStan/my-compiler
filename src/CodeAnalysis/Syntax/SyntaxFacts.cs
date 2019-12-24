@@ -49,21 +49,16 @@ namespace CodeAnalysis.Syntax
         }
 
         public static SyntaxKind GetKeywordKind(string text)
-        {
-            switch (text)
+            => text switch
             {
-                case "true":
-                    return SyntaxKind.TrueKeyword;
-                case "false":
-                    return SyntaxKind.FalseKeyword;
-                case "let":
-                    return SyntaxKind.LetKeyword;
-                case "var":
-                    return SyntaxKind.VarKeyword;
-                default:
-                    return SyntaxKind.IdentifierToken;
-            }
-        }
+                "else" => SyntaxKind.ElseKeyword,
+                "false" => SyntaxKind.FalseKeyword,
+                "if" => SyntaxKind.IfKeyword,
+                "let" => SyntaxKind.LetKeyword,
+                "true" => SyntaxKind.TrueKeyword,
+                "var" => SyntaxKind.VarKeyword,
+                _ => SyntaxKind.IdentifierToken,
+            };
 
         public static string GetText(SyntaxKind kind)
             => kind switch
@@ -86,7 +81,9 @@ namespace CodeAnalysis.Syntax
                 SyntaxKind.CloseParenthesisToken => ")",
                 SyntaxKind.OpenBraceToken => "{",
                 SyntaxKind.CloseBraceToken => "}",
+                SyntaxKind.ElseKeyword => "else",
                 SyntaxKind.FalseKeyword => "false",
+                SyntaxKind.IfKeyword => "if",
                 SyntaxKind.TrueKeyword => "true",
                 SyntaxKind.VarKeyword => "var",
                 SyntaxKind.LetKeyword => "let",

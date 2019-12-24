@@ -36,7 +36,8 @@ namespace CodeAnalysis.Syntax
                 {
                     var children = (IEnumerable<SyntaxNode>)property.GetValue(this);
                     foreach (var child in children)
-                        yield return child;
+                        if (child != null)
+                            yield return child;
                 }
             }
         }

@@ -8,12 +8,13 @@
         BlockStatement,
         VariableDeclaration,
         ExpressionStatement,
+        IfStatement,
 
         // expressions
         UnaryExpression,
         BinaryExpression,
         LiteralExpression,
         VariableExpression,
-        AssignmentExpression
+        AssignmentExpression,
     }
 }

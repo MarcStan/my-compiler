@@ -77,9 +77,31 @@ namespace CodeAnalysis.Syntax
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.VarKeyword:
                     return ParseVariableDeclaration();
+                case SyntaxKind.IfKeyword:
+                    return ParseIfStatement();
                 default:
                     return ParseExpressionStatement();
             }
+        }
+
+        private StatementSyntax ParseIfStatement()
+        {
+            var keyword = MatchToken(SyntaxKind.IfKeyword);
+            var condition = ParseExpression();
+            var statement = ParseStatement();
+            var optionalElse = ParseOptionalElseClause();
+
+            return new IfStatementSyntax(keyword, condition, statement, optionalElse);
+        }
+
+        private ElseClauseSyntax ParseOptionalElseClause()
+        {
+            if (Current.Kind != SyntaxKind.ElseKeyword)
+                return null;
+
+            var keyword = MatchToken(SyntaxKind.ElseKeyword);
+            var statement = ParseStatement();
+            return new ElseClauseSyntax(keyword, statement);
         }
 
         private StatementSyntax ParseVariableDeclaration()

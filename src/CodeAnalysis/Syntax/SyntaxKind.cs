@@ -37,7 +37,9 @@
         AssignmentExpression,
 
         // keyword
+        ElseKeyword,
         LetKeyword,
+        IfKeyword,
         VarKeyword,
         FalseKeyword,
         TrueKeyword,
@@ -45,10 +47,12 @@
 
         // nodes
         CompilationUnit,
+        ElseClause,
 
         // statements
         BlockStatement,
         ExpressionStatement,
+        IfStatement,
 
         VariableDeclaration,
     }

@@ -46,6 +46,10 @@ namespace CodeAnalysis.Tests
         [TestCase("9 == 8 + 1", true)]
         [TestCase("9 != 8 - 1", true)]
         [TestCase("{ var a = 0 (a = 10) * a }", 100)]
+        [TestCase("{ var a = 10 if a == 10 a }", 10)]
+        [TestCase("{ var a = 5 if a == 10 a a }", 5)]
+        [TestCase("{ var a = 5 if a == 10 a else a * 3 }", 15)]
+        [TestCase("{ var a = 10 if a == 10 a else a * 3 }", 10)]
         public void Expressions_should_evaluate_correctly(string text, object expected)
         {
             var syntaxTree = SyntaxTree.Parse(text);

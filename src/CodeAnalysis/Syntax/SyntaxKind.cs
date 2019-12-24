@@ -45,6 +45,8 @@
         TrueKeyword,
         IdentifierToken,
         WhileKeyword,
+        ForKeyword,
+        ToKeyword,
 
         // nodes
         CompilationUnit,
@@ -55,6 +57,8 @@
         ExpressionStatement,
         IfStatement,
         WhileStatement,
+        ForStatement,
+
         VariableDeclaration,
     }
 }

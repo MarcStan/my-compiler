@@ -57,11 +57,30 @@ namespace CodeAnalysis.Binding
             {
                 SyntaxKind.BlockStatement => BindbBlockStatement((BlockStatementSyntax)syntax),
                 SyntaxKind.ExpressionStatement => BindExpressionStatement((ExpressionStatementSyntax)syntax),
+                SyntaxKind.ForStatement => BindForStatement((ForStatementSyntax)syntax),
                 SyntaxKind.IfStatement => BindIfStatement((IfStatementSyntax)syntax),
                 SyntaxKind.VariableDeclaration => BindVariableDeclaration((VariableDeclarationSyntax)syntax),
                 SyntaxKind.WhileStatement => BindWhileStatement((WhileStatementSyntax)syntax),
                 _ => throw new ArgumentException($"Unexpected syntax {syntax.Kind}"),
             };
+
+        private BoundStatement BindForStatement(ForStatementSyntax syntax)
+        {
+            var lowerBound = BindExpression(syntax.LowerBound, typeof(int));
+            var upperBound = BindExpression(syntax.UpperBound, typeof(int));
+
+            var name = syntax.Identifier.Text;
+            var variable = new VariableSymbol(name, true, typeof(int));
+            _scope = new BoundScope(_scope);
+
+            if (!_scope.TryDeclare(variable))
+                Diagnostics.ReportVariableAlreadyDeclared(syntax.Identifier.Span, name);
+
+            var body = BindStatement(syntax.Body);
+
+            _scope = _scope.Parent;
+            return new BoundForStatement(variable, lowerBound, upperBound, body);
+        }
 
         private BoundStatement BindWhileStatement(WhileStatementSyntax syntax)
         {

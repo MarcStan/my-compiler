@@ -53,10 +53,12 @@ namespace CodeAnalysis.Syntax
             {
                 "else" => SyntaxKind.ElseKeyword,
                 "false" => SyntaxKind.FalseKeyword,
+                "for" => SyntaxKind.ForKeyword,
                 "if" => SyntaxKind.IfKeyword,
                 "let" => SyntaxKind.LetKeyword,
                 "true" => SyntaxKind.TrueKeyword,
                 "var" => SyntaxKind.VarKeyword,
+                "to" => SyntaxKind.ToKeyword,
                 "while" => SyntaxKind.WhileKeyword,
                 _ => SyntaxKind.IdentifierToken,
             };
@@ -85,8 +87,10 @@ namespace CodeAnalysis.Syntax
                 SyntaxKind.ElseKeyword => "else",
                 SyntaxKind.FalseKeyword => "false",
                 SyntaxKind.IfKeyword => "if",
+                SyntaxKind.ForKeyword => "for",
                 SyntaxKind.TrueKeyword => "true",
                 SyntaxKind.VarKeyword => "var",
+                SyntaxKind.ToKeyword => "to",
                 SyntaxKind.WhileKeyword => "while",
                 SyntaxKind.LetKeyword => "let",
                 _ => null

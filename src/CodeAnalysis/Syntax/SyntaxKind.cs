@@ -18,11 +18,15 @@
         OpenBraceToken,
         CloseBraceToken,
         BangToken,
-        AmpersandToken,
-        PipeToken,
+        AmpersandAmpersandToken,
+        PipePipeToken,
         EqualsToken,
         EqualsEqualsToken,
         BangEqualsToken,
+        LessToken,
+        LessOrEqualsToken,
+        GreaterToken,
+        GreaterOrEqualsToken,
 
         // expressions
         LiteralExpression,
@@ -46,6 +50,6 @@
         BlockStatement,
         ExpressionStatement,
 
-        VariableDeclaration
+        VariableDeclaration,
     }
 }

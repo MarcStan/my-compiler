@@ -178,6 +178,18 @@ namespace CodeAnalysis.Tests
             if (kind1 == SyntaxKind.EqualsToken && kind2 == SyntaxKind.EqualsEqualsToken)
                 return true;
 
+            if (kind1 == SyntaxKind.LessToken && kind2 == SyntaxKind.EqualsToken)
+                return true;
+
+            if (kind1 == SyntaxKind.GreaterToken && kind2 == SyntaxKind.EqualsToken)
+                return true;
+
+            if (kind1 == SyntaxKind.LessToken && kind2 == SyntaxKind.EqualsEqualsToken)
+                return true;
+
+            if (kind1 == SyntaxKind.GreaterToken && kind2 == SyntaxKind.EqualsEqualsToken)
+                return true;
+
             return false;
         }
     }

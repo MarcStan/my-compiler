@@ -79,7 +79,7 @@ namespace CodeAnalysis.Syntax
                     if (Current == '&')
                     {
                         _position++;
-                        _kind = SyntaxKind.AmpersandToken;
+                        _kind = SyntaxKind.AmpersandAmpersandToken;
                     }
                     break;
                 case '|':
@@ -87,7 +87,7 @@ namespace CodeAnalysis.Syntax
                     if (Current == '|')
                     {
                         _position++;
-                        _kind = SyntaxKind.PipeToken;
+                        _kind = SyntaxKind.PipePipeToken;
                     }
                     break;
                 case '=':
@@ -112,6 +112,30 @@ namespace CodeAnalysis.Syntax
                     else
                     {
                         _kind = SyntaxKind.BangToken;
+                    }
+                    break;
+                case '<':
+                    _position++;
+                    if (Current == '=')
+                    {
+                        _position++;
+                        _kind = SyntaxKind.LessOrEqualsToken;
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.LessToken;
+                    }
+                    break;
+                case '>':
+                    _position++;
+                    if (Current == '=')
+                    {
+                        _position++;
+                        _kind = SyntaxKind.GreaterOrEqualsToken;
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.GreaterToken;
                     }
                     break;
                 case '0':

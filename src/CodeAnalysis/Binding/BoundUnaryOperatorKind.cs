@@ -5,6 +5,7 @@
         Unknown = 0,
         Identity,
         Negation,
-        LogicalNegation
+        LogicalNegation,
+        OnesComplement
     }
 }

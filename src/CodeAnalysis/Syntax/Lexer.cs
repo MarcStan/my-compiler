@@ -81,6 +81,10 @@ namespace CodeAnalysis.Syntax
                         _position++;
                         _kind = SyntaxKind.AmpersandAmpersandToken;
                     }
+                    else
+                    {
+                        _kind = SyntaxKind.AmpersandToken;
+                    }
                     break;
                 case '|':
                     _position++;
@@ -89,6 +93,18 @@ namespace CodeAnalysis.Syntax
                         _position++;
                         _kind = SyntaxKind.PipePipeToken;
                     }
+                    else
+                    {
+                        _kind = SyntaxKind.PipeToken;
+                    }
+                    break;
+                case '^':
+                    _kind = SyntaxKind.HatToken;
+                    _position++;
+                    break;
+                case '~':
+                    _kind = SyntaxKind.TildeToken;
+                    _position++;
                     break;
                 case '=':
                     _position++;

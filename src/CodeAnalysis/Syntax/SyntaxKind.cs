@@ -27,6 +27,11 @@
         LessOrEqualsToken,
         GreaterToken,
         GreaterOrEqualsToken,
+        // bitwise operator tokens
+        PipeToken,
+        AmpersandToken,
+        TildeToken,
+        HatToken,
 
         // expressions
         LiteralExpression,

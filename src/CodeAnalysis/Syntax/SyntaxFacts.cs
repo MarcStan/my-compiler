@@ -12,6 +12,7 @@ namespace CodeAnalysis.Syntax
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.BangToken:
+                case SyntaxKind.TildeToken:
                     return 6;
                 default:
                     return 0;
@@ -38,10 +39,13 @@ namespace CodeAnalysis.Syntax
                 case SyntaxKind.GreaterOrEqualsToken:
                     return 3;
 
+                case SyntaxKind.AmpersandToken:
                 case SyntaxKind.AmpersandAmpersandToken:
                     return 2;
 
+                case SyntaxKind.PipeToken:
                 case SyntaxKind.PipePipeToken:
+                case SyntaxKind.HatToken:
                     return 1;
                 default:
                     return 0;
@@ -78,6 +82,10 @@ namespace CodeAnalysis.Syntax
                 SyntaxKind.LessOrEqualsToken => "<=",
                 SyntaxKind.GreaterToken => ">",
                 SyntaxKind.GreaterOrEqualsToken => ">=",
+                SyntaxKind.AmpersandToken => "&",
+                SyntaxKind.PipeToken => "|",
+                SyntaxKind.TildeToken => "~",
+                SyntaxKind.HatToken => "^",
                 SyntaxKind.EqualsEqualsToken => "==",
                 SyntaxKind.BangEqualsToken => "!=",
                 SyntaxKind.OpenParenthesisToken => "(",

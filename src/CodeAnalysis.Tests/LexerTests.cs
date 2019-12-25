@@ -190,6 +190,18 @@ namespace CodeAnalysis.Tests
             if (kind1 == SyntaxKind.GreaterToken && kind2 == SyntaxKind.EqualsEqualsToken)
                 return true;
 
+            if (kind1 == SyntaxKind.AmpersandToken && kind2 == SyntaxKind.AmpersandAmpersandToken)
+                return true;
+
+            if (kind1 == SyntaxKind.AmpersandToken && kind2 == SyntaxKind.AmpersandToken)
+                return true;
+
+            if (kind1 == SyntaxKind.PipeToken && kind2 == SyntaxKind.PipePipeToken)
+                return true;
+
+            if (kind1 == SyntaxKind.PipeToken && kind2 == SyntaxKind.PipeToken)
+                return true;
+
             return false;
         }
     }

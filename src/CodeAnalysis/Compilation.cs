@@ -2,6 +2,7 @@
 using CodeAnalysis.Syntax;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -55,5 +56,8 @@ namespace CodeAnalysis
 
             return new EvaluationResult(diag, value);
         }
+
+        public void EmitTree(TextWriter writer)
+            => _globalScope.Statement.WriteTo(writer);
     }
 }

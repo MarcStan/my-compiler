@@ -13,6 +13,7 @@ namespace Repl
         public static void Main()
         {
             bool showTree = false;
+            bool showProgram = false;
             var variables = new Dictionary<VariableSymbol, object>();
             var builder = new StringBuilder();
 
@@ -37,6 +38,12 @@ namespace Repl
                     {
                         showTree = !showTree;
                         Console.WriteLine(showTree ? "Showing parse trees." : "Not showing parse trees");
+                        continue;
+                    }
+                    else if (input == "showProgram")
+                    {
+                        showProgram = !showProgram;
+                        Console.WriteLine(showProgram ? "Showing bound tree." : "Not showing bound tree");
                         continue;
                     }
                     else if (input == "cls")
@@ -97,6 +104,8 @@ namespace Repl
 
                     if (showTree)
                         syntaxTree.Root.WriteTo(Console.Out);
+                    if (showProgram)
+                        comp.EmitTree(Console.Out);
 
                     Console.WriteLine(result.Value);
                 }

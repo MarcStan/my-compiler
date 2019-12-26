@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
-
-namespace CodeAnalysis.Binding
+﻿namespace CodeAnalysis.Binding.Nodes
 {
 
     internal sealed class BoundExpressionStatement : BoundStatement

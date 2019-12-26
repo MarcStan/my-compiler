@@ -1,4 +1,4 @@
-﻿namespace CodeAnalysis.Binding
+﻿namespace CodeAnalysis.Binding.Nodes
 {
     internal sealed class BoundWhileStatement : BoundStatement
     {

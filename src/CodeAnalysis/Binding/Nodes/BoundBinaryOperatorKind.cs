@@ -1,4 +1,4 @@
-﻿namespace CodeAnalysis.Binding
+﻿namespace CodeAnalysis.Binding.Nodes
 {
     public enum BoundBinaryOperatorKind
     {

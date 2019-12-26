@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace CodeAnalysis.Binding
+namespace CodeAnalysis.Binding.Nodes
 {
     internal sealed class BoundBinaryOperator
     {

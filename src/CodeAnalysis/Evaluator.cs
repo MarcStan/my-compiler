@@ -1,4 +1,5 @@
 ﻿using CodeAnalysis.Binding;
+using CodeAnalysis.Binding.Nodes;
 using System;
 using System.Collections.Generic;
 

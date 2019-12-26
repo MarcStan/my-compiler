@@ -10,6 +10,8 @@
         ForStatement,
         IfStatement,
         WhileStatement,
+        GoToStatement,
+        LabelStatement,
 
         VariableDeclaration,
 
@@ -19,5 +21,6 @@
         LiteralExpression,
         VariableExpression,
         AssignmentExpression,
+        ConditionalGoToStatement,
     }
 }

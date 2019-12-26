@@ -1,4 +1,4 @@
-﻿namespace CodeAnalysis.Binding
+﻿namespace CodeAnalysis.Binding.Nodes
 {
     internal abstract class BoundStatement : BoundNode
     {

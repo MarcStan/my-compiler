@@ -1,4 +1,5 @@
 ﻿using CodeAnalysis;
+using CodeAnalysis.Symbols;
 using CodeAnalysis.Syntax;
 using CodeAnalysis.Text;
 using System;

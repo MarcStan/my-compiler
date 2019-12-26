@@ -1,4 +1,6 @@
-﻿namespace CodeAnalysis.Binding.Nodes
+﻿using CodeAnalysis.Symbols;
+
+namespace CodeAnalysis.Binding.Nodes
 {
     internal sealed class BoundForStatement : BoundStatement
     {

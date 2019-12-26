@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeAnalysis.Symbols;
+using System;
 
 namespace CodeAnalysis.Binding.Nodes
 {

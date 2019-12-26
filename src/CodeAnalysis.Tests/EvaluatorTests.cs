@@ -1,4 +1,5 @@
-﻿using CodeAnalysis.Syntax;
+﻿using CodeAnalysis.Symbols;
+using CodeAnalysis.Syntax;
 using CodeAnalysis.Tests.Helpers;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;

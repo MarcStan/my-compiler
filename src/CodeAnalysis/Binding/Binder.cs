@@ -1,4 +1,5 @@
 ﻿using CodeAnalysis.Binding.Nodes;
+using CodeAnalysis.Symbols;
 using CodeAnalysis.Syntax;
 using CodeAnalysis.Syntax.Nodes;
 using System;

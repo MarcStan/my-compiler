@@ -1,5 +1,6 @@
 ﻿using CodeAnalysis.Binding;
 using CodeAnalysis.Binding.Nodes;
+using CodeAnalysis.Symbols;
 using System;
 using System.Collections.Generic;
 
@@ -20,7 +21,7 @@ namespace CodeAnalysis
 
         public object Evaluate()
         {
-            var labelToIndex = new Dictionary<LabelSymbol, int>();
+            var labelToIndex = new Dictionary<BoundLabel, int>();
 
             for (int i = 0; i < _root.Statements.Length; i++)
             {

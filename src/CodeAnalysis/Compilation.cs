@@ -1,6 +1,7 @@
 ﻿using CodeAnalysis.Binding;
 using CodeAnalysis.Binding.Nodes;
 using CodeAnalysis.Lowering;
+using CodeAnalysis.Symbols;
 using CodeAnalysis.Syntax;
 using System.Collections.Generic;
 using System.Collections.Immutable;

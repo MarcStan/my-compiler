@@ -1,4 +1,5 @@
 ﻿using CodeAnalysis.Binding.Nodes;
+using CodeAnalysis.Symbols;
 using System.Collections.Immutable;
 
 namespace CodeAnalysis.Binding

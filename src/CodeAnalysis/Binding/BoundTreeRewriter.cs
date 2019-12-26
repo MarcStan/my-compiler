@@ -17,17 +17,33 @@ namespace CodeAnalysis.Binding
                 _ => throw new ArgumentException($"Cannot rewrite {s.Kind}")
             };
 
-        public virtual BoundStatement RewriteStatement(BoundStatement s)
-            => s.Kind switch
+        public virtual BoundStatement RewriteStatement(BoundStatement node)
+            => node.Kind switch
             {
-                BoundNodeKind.BlockStatement => RewriteBlockStatement((BoundBlockStatement)s),
-                BoundNodeKind.ExpressionStatement => RewriteExpressionStatement((BoundExpressionStatement)s),
-                BoundNodeKind.ForStatement => RewriteForStatement((BoundForStatement)s),
-                BoundNodeKind.IfStatement => RewriteIfStatement((BoundIfStatement)s),
-                BoundNodeKind.WhileStatement => RewriteWhileStatement((BoundWhileStatement)s),
-                BoundNodeKind.VariableDeclaration => RewriteVariableDeclaration((BoundVariableDeclaration)s),
-                _ => throw new ArgumentException($"Cannot rewrite {s.Kind}")
+                BoundNodeKind.BlockStatement => RewriteBlockStatement((BoundBlockStatement)node),
+                BoundNodeKind.ExpressionStatement => RewriteExpressionStatement((BoundExpressionStatement)node),
+                BoundNodeKind.ForStatement => RewriteForStatement((BoundForStatement)node),
+                BoundNodeKind.IfStatement => RewriteIfStatement((BoundIfStatement)node),
+                BoundNodeKind.VariableDeclaration => RewriteVariableDeclaration((BoundVariableDeclaration)node),
+                BoundNodeKind.WhileStatement => RewriteWhileStatement((BoundWhileStatement)node),
+                BoundNodeKind.LabelStatement => RewriteLabelStatement((BoundLabelStatement)node),
+                BoundNodeKind.GoToStatement => RewriteGoToStatement((BoundGoToStatement)node),
+                BoundNodeKind.ConditionalGoToStatement => RewriteConditionalGoToStatement((BoundConditionalGoToStatement)node),
+                _ => throw new ArgumentException($"Cannot rewrite {node.Kind}")
             };
+
+        protected virtual BoundStatement RewriteConditionalGoToStatement(BoundConditionalGoToStatement node)
+        {
+            var condition = RewriteExpression(node.Condition);
+            if (condition == node.Condition)
+                return node;
+
+            return new BoundConditionalGoToStatement(node.Label, condition, node.JumpIfFalse);
+        }
+
+        protected virtual BoundStatement RewriteGoToStatement(BoundGoToStatement node) => node;
+
+        protected virtual BoundStatement RewriteLabelStatement(BoundLabelStatement node) => node;
 
         protected virtual BoundStatement RewriteVariableDeclaration(BoundVariableDeclaration node)
         {
@@ -139,14 +155,8 @@ namespace CodeAnalysis.Binding
             return new BoundAssignmentExpression(node.Variable, expression);
         }
 
-        protected virtual BoundExpression RewriteVariableExpression(BoundVariableExpression node)
-        {
-            return node;
-        }
+        protected virtual BoundExpression RewriteVariableExpression(BoundVariableExpression node) => node;
 
-        protected virtual BoundExpression RewriteLiteralExpression(BoundLiteralExpression node)
-        {
-            return node;
-        }
+        protected virtual BoundExpression RewriteLiteralExpression(BoundLiteralExpression node) => node;
     }
 }

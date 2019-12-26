@@ -62,7 +62,7 @@ namespace CodeAnalysis
         public void EmitTree(TextWriter writer)
             => GetStatement().WriteTo(writer);
 
-        private BoundStatement GetStatement()
+        private BoundBlockStatement GetStatement()
         {
             var statement = _globalScope.Statement;
             return Lowerer.Lower(statement);

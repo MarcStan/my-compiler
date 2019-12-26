@@ -1,4 +1,5 @@
 ﻿using CodeAnalysis.Binding;
+using CodeAnalysis.Lowering;
 using CodeAnalysis.Syntax;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -51,13 +52,19 @@ namespace CodeAnalysis
             if (diag.Any())
                 return new EvaluationResult(diag, null);
 
-            var evaluator = new Evaluator(GlobalScope.Statement, variables);
+            var evaluator = new Evaluator(GetStatement(), variables);
             var value = evaluator.Evaluate();
 
             return new EvaluationResult(diag, value);
         }
 
         public void EmitTree(TextWriter writer)
-            => _globalScope.Statement.WriteTo(writer);
+            => GetStatement().WriteTo(writer);
+
+        private BoundStatement GetStatement()
+        {
+            var statement = _globalScope.Statement;
+            return Lowerer.Lower(statement);
+        }
     }
 }

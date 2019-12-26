@@ -13,6 +13,11 @@ namespace CodeAnalysis.Binding
 
         public override Type Type => Value.GetType();
 
+        public static explicit operator BoundLiteralExpression(BoundStatement v)
+        {
+            throw new NotImplementedException();
+        }
+
         public override BoundNodeKind Kind => BoundNodeKind.LiteralExpression;
     }
 }

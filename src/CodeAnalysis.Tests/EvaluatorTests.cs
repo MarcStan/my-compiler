@@ -67,7 +67,7 @@ namespace CodeAnalysis.Tests
         [TestCase("{ var a = 5 if a == 10 a else a * 3 }", 15)]
         [TestCase("{ var a = 10 if a == 10 a else a * 3 }", 10)]
         [TestCase("{ var i = 0 var a = 0 while i < 10 { a = a + 2 i = i + 1 } a }", 20)]
-        [TestCase("{ var a = 0 for i = 0 to 10 { a = i + 1 } a }", 10)]
+        [TestCase("{ var a = 0 for i = 0 to 10 { a = i + a } a }", 55)]
         public void Expressions_should_evaluate_correctly(string text, object expected)
         {
             var syntaxTree = SyntaxTree.Parse(text);

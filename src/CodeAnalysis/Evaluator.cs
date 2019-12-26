@@ -36,9 +36,6 @@ namespace CodeAnalysis
                 case BoundNodeKind.VariableDeclaration:
                     EvaluateVariableDeclaration((BoundVariableDeclaration)node);
                     break;
-                case BoundNodeKind.ForStatement:
-                    EvaluateForStatement((BoundForStatement)node);
-                    break;
                 case BoundNodeKind.IfStatement:
                     EvaluateIfStatement((BoundIfStatement)node);
                     break;
@@ -47,17 +44,6 @@ namespace CodeAnalysis
                     break;
                 default:
                     throw new ArgumentException($"Unexpected node {node.Kind}");
-            }
-        }
-
-        private void EvaluateForStatement(BoundForStatement node)
-        {
-            var start = (int)EvaluateExpression(node.LowerBound);
-            var end = (int)EvaluateExpression(node.UpperBound);
-            for (int i = start; i < end; i++)
-            {
-                _variables[node.Variable] = i;
-                EvaluateStatement(node.Body);
             }
         }
 

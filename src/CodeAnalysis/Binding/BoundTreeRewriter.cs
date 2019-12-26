@@ -96,7 +96,7 @@ namespace CodeAnalysis.Binding
                     {
                         builder = ImmutableArray.CreateBuilder<BoundStatement>(node.Statements.Length);
                         for (int j = 0; j < i; j++)
-                            builder.Add(node.Statements[i]);
+                            builder.Add(node.Statements[j]);
                     }
                 }
 

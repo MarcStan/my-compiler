@@ -32,6 +32,7 @@
         AmpersandToken,
         TildeToken,
         HatToken,
+        StringToken,
 
         // expressions
         LiteralExpression,

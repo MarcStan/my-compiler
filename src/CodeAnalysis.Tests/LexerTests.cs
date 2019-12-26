@@ -100,7 +100,9 @@ namespace CodeAnalysis.Tests
                 (SyntaxKind.NumberToken, "1"),
                 (SyntaxKind.NumberToken, "123"),
                 (SyntaxKind.IdentifierToken, "a"),
-                (SyntaxKind.IdentifierToken, "abc")
+                (SyntaxKind.IdentifierToken, "abc"),
+                (SyntaxKind.StringToken, "\"test\""),
+                (SyntaxKind.StringToken, "\"te\\\"st\""),
             };
 
             return fixedTokens.Concat(dynamicTokens);
@@ -200,6 +202,9 @@ namespace CodeAnalysis.Tests
                 return true;
 
             if (kind1 == SyntaxKind.PipeToken && kind2 == SyntaxKind.PipeToken)
+                return true;
+
+            if (kind1 == SyntaxKind.StringToken && kind2 == SyntaxKind.StringToken)
                 return true;
 
             return false;

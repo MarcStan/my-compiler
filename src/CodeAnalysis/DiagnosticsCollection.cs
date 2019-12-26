@@ -1,5 +1,4 @@
-﻿using CodeAnalysis.Binding;
-using CodeAnalysis.Syntax;
+﻿using CodeAnalysis.Syntax;
 using CodeAnalysis.Text;
 using System;
 using System.Collections;
@@ -51,5 +50,8 @@ namespace CodeAnalysis
 
         public void ReportCannotAssign(TextSpan span, string name)
             => Report(span, $"Variable '{name}' is read-only and cannot be assigned to.");
+
+        public void ReportUnterminatedString(TextSpan span)
+            => Report(span, "Unterminated string literal.");
     }
 }

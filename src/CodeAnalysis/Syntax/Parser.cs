@@ -226,6 +226,7 @@ namespace CodeAnalysis.Syntax
             => Current.Kind switch
             {
                 SyntaxKind.NumberToken => ParseNumberLiteral(),
+                SyntaxKind.StringToken => ParseStringLiteral(),
                 SyntaxKind.OpenParenthesisToken => ParenthesizedExpression(),
                 var boolean when
                     boolean == SyntaxKind.TrueKeyword ||
@@ -238,6 +239,12 @@ namespace CodeAnalysis.Syntax
         {
             var numberToken = MatchToken(SyntaxKind.NumberToken);
             return new LiteralExpressionSyntax(numberToken);
+        }
+
+        private ExpressionSyntax ParseStringLiteral()
+        {
+            var stringToken = MatchToken(SyntaxKind.StringToken);
+            return new LiteralExpressionSyntax(stringToken);
         }
 
         private ExpressionSyntax ParenthesizedExpression()

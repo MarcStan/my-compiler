@@ -1,4 +1,5 @@
 ﻿using CodeAnalysis.Text;
+using System.Text;
 
 namespace CodeAnalysis.Syntax
 {
@@ -154,6 +155,9 @@ namespace CodeAnalysis.Syntax
                         _kind = SyntaxKind.GreaterToken;
                     }
                     break;
+                case '"':
+                    ReadString();
+                    break;
                 case '0':
                 case '1':
                 case '2':
@@ -186,6 +190,49 @@ namespace CodeAnalysis.Syntax
             var text = SyntaxFacts.GetText(_kind) ?? _text.ToString(_start, length);
 
             return new SyntaxToken(_kind, _start, text, _value);
+        }
+
+        private void ReadString()
+        {
+            _position++;
+
+            var sb = new StringBuilder();
+            var done = false;
+            while (!done)
+            {
+                switch (Current)
+                {
+                    case '\0':
+                    case '\r':
+                    case '\n':
+                        done = true;
+                        Diagnostics.ReportUnterminatedString(new TextSpan(_start, 1));
+                        break;
+                    case '\\':
+                        if (LookAhead == '"')
+                        {
+                            sb.Append('"');
+                            _position++;
+                        }
+                        else
+                        {
+                            sb.Append(Current);
+                        }
+                        _position++;
+                        break;
+                    case '"':
+                        _position++;
+                        done = true;
+                        break;
+                    default:
+                        sb.Append(Current);
+                        _position++;
+                        break;
+                }
+            }
+
+            _value = sb.ToString();
+            _kind = SyntaxKind.StringToken;
         }
 
         private void ReadIdentififerOrKeyword()

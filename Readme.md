@@ -10,10 +10,12 @@ Currently a repl is implemented to execute immediate statements.
 
 Supported features:
 
+* multiline commands
 * variable assignments
 * boolean operations
 * mathematical operations
 * paranthesis & operator precedence support
+* if, while & for loop support
 
 ## Example commands
 

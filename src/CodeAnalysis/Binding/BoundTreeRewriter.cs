@@ -6,15 +6,16 @@ namespace CodeAnalysis.Binding
 {
     internal abstract class BoundTreeRewriter
     {
-        public virtual BoundExpression RewriteExpression(BoundExpression s)
-            => s.Kind switch
+        public virtual BoundExpression RewriteExpression(BoundExpression node)
+            => node.Kind switch
             {
-                BoundNodeKind.LiteralExpression => RewriteLiteralExpression((BoundLiteralExpression)s),
-                BoundNodeKind.VariableExpression => RewriteVariableExpression((BoundVariableExpression)s),
-                BoundNodeKind.AssignmentExpression => RewriteAssignmentExpression((BoundAssignmentExpression)s),
-                BoundNodeKind.UnaryExpression => RewriteUnaryExpression((BoundUnaryExpression)s),
-                BoundNodeKind.BinaryExpression => RewriteBinaryExpression((BoundBinaryExpression)s),
-                _ => throw new ArgumentException($"Cannot rewrite {s.Kind}")
+                BoundNodeKind.ErrorExpression => RewriteErrorExpression((BoundErrorExpression)node),
+                BoundNodeKind.LiteralExpression => RewriteLiteralExpression((BoundLiteralExpression)node),
+                BoundNodeKind.VariableExpression => RewriteVariableExpression((BoundVariableExpression)node),
+                BoundNodeKind.AssignmentExpression => RewriteAssignmentExpression((BoundAssignmentExpression)node),
+                BoundNodeKind.UnaryExpression => RewriteUnaryExpression((BoundUnaryExpression)node),
+                BoundNodeKind.BinaryExpression => RewriteBinaryExpression((BoundBinaryExpression)node),
+                _ => throw new ArgumentException($"Cannot rewrite {node.Kind}")
             };
 
         public virtual BoundStatement RewriteStatement(BoundStatement node)
@@ -40,6 +41,8 @@ namespace CodeAnalysis.Binding
 
             return new BoundConditionalGoToStatement(node.Label, condition, node.JumpIfFalse);
         }
+
+        protected virtual BoundExpression RewriteErrorExpression(BoundErrorExpression node) => node;
 
         protected virtual BoundStatement RewriteGoToStatement(BoundGoToStatement node) => node;
 

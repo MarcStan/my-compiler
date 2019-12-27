@@ -21,5 +21,7 @@ namespace CodeAnalysis.Syntax
         public object Value { get; }
 
         public override TextSpan Span => new TextSpan(Position, Text?.Length ?? 0);
+
+        public bool IsMissing => string.IsNullOrEmpty(Text);
     }
 }

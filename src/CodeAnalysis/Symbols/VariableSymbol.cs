@@ -2,17 +2,17 @@
 
 namespace CodeAnalysis.Symbols
 {
-    public sealed class VariableSymbol
+    public sealed class VariableSymbol : Symbol
     {
         internal VariableSymbol(string name, bool isReadOnly, Type type)
+            : base(name)
         {
-            Name = name;
             Type = type;
             IsReadOnly = isReadOnly;
         }
 
-        public string Name { get; }
         public Type Type { get; }
         public bool IsReadOnly { get; }
+        public override SymbolKind Kind => SymbolKind.Variable;
     }
 }

@@ -12,6 +12,7 @@
         WhileStatement,
         GoToStatement,
         LabelStatement,
+        ConditionalGoToStatement,
 
         VariableDeclaration,
 
@@ -21,6 +22,6 @@
         LiteralExpression,
         VariableExpression,
         AssignmentExpression,
-        ConditionalGoToStatement,
+        ErrorExpression,
     }
 }

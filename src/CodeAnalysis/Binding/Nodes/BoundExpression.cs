@@ -1,9 +1,9 @@
-﻿using System;
+﻿using CodeAnalysis.Symbols;
 
 namespace CodeAnalysis.Binding.Nodes
 {
     internal abstract class BoundExpression : BoundNode
     {
-        public abstract Type Type { get; }
+        public abstract TypeSymbol Type { get; }
     }
 }

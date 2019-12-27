@@ -1,4 +1,4 @@
-﻿using System;
+﻿using CodeAnalysis.Symbols;
 
 namespace CodeAnalysis.Binding.Nodes
 {
@@ -10,7 +10,7 @@ namespace CodeAnalysis.Binding.Nodes
             Operand = operand;
         }
 
-        public override Type Type => Operator.Type;
+        public override TypeSymbol Type => Operator.Type;
 
         public override BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
 

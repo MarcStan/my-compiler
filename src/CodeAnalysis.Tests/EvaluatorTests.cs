@@ -131,7 +131,7 @@ namespace CodeAnalysis.Tests
             ";
 
             var diagnostics = @"
-                Cannot convert type 'System.Boolean' to 'System.Int32'.
+                Cannot convert type 'bool' to 'int'.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -140,10 +140,10 @@ namespace CodeAnalysis.Tests
         [Test]
         public void Unary_operator_on_boolean_is_undefined_and_should_cause_error()
         {
-            var text = @"[+]true";
+            var text = "[+]true";
 
             var diagnostics = @"
-                Unary operator '+' is not defined for type 'System.Boolean'.
+                Unary operator '+' is not defined for type 'bool'.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -155,7 +155,7 @@ namespace CodeAnalysis.Tests
             var text = @"10 [*] true";
 
             var diagnostics = @"
-                Binary operator '*' is not defined for types 'System.Int32' and 'System.Boolean'.
+                Binary operator '*' is not defined for types 'int' and 'bool'.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -164,7 +164,7 @@ namespace CodeAnalysis.Tests
         [Test]
         public void Undefined_variable_use_should_report_missing()
         {
-            var text = @"[x] * 10";
+            var text = "[x] * 10";
 
             var diagnostics = @"
                 Variable 'x' does not exist.

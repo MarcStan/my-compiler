@@ -1,5 +1,4 @@
 ﻿using CodeAnalysis.Symbols;
-using System;
 
 namespace CodeAnalysis.Binding.Nodes
 {
@@ -13,6 +12,6 @@ namespace CodeAnalysis.Binding.Nodes
         public override BoundNodeKind Kind => BoundNodeKind.VariableExpression;
         public VariableSymbol Variable { get; }
 
-        public override Type Type => Variable.Type;
+        public override TypeSymbol Type => Variable.Type;
     }
 }

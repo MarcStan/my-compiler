@@ -117,13 +117,13 @@ namespace CodeAnalysis
                 BoundBinaryOperatorKind.LessOrEquals => (int)left <= (int)right,
                 BoundBinaryOperatorKind.Greater => (int)left > (int)right,
                 BoundBinaryOperatorKind.GreaterOrEquals => (int)left >= (int)right,
-                BoundBinaryOperatorKind.BitwiseAnd => b.Type == typeof(int) ?
+                BoundBinaryOperatorKind.BitwiseAnd => b.Type == TypeSymbol.Int ?
                         (object)((int)left & (int)right) :
                         (bool)left & (bool)right,
-                BoundBinaryOperatorKind.BitwiseOr => b.Type == typeof(int) ?
+                BoundBinaryOperatorKind.BitwiseOr => b.Type == TypeSymbol.Int ?
                         (object)((int)left | (int)right) :
                         (bool)left | (bool)right,
-                BoundBinaryOperatorKind.BitwiseXor => b.Type == typeof(int) ?
+                BoundBinaryOperatorKind.BitwiseXor => b.Type == TypeSymbol.Int ?
                         (object)((int)left ^ (int)right) :
                         (bool)left ^ (bool)right,
                 _ => throw new ArgumentException($"Unexpected binary operator {b.Operator}"),

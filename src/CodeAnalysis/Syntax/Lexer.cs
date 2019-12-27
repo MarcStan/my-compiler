@@ -1,4 +1,5 @@
-﻿using CodeAnalysis.Text;
+﻿using CodeAnalysis.Symbols;
+using CodeAnalysis.Text;
 using System.Text;
 
 namespace CodeAnalysis.Syntax
@@ -263,7 +264,7 @@ namespace CodeAnalysis.Syntax
             var text = _text.ToString(_start, length);
 
             if (!int.TryParse(text, out int value))
-                Diagnostics.ReportInvalidNumber(new TextSpan(_start, length), text, typeof(int));
+                Diagnostics.ReportInvalidNumber(new TextSpan(_start, length), text, TypeSymbol.Int);
 
             _value = value;
             _kind = SyntaxKind.NumberToken;

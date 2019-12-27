@@ -1,5 +1,4 @@
 ﻿using CodeAnalysis.Symbols;
-using System;
 
 namespace CodeAnalysis.Binding.Nodes
 {
@@ -11,7 +10,7 @@ namespace CodeAnalysis.Binding.Nodes
             Expression = expression;
         }
 
-        public override Type Type => Expression.Type;
+        public override TypeSymbol Type => Expression.Type;
 
         public override BoundNodeKind Kind => BoundNodeKind.AssignmentExpression;
 

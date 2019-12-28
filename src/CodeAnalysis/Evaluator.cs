@@ -84,8 +84,22 @@ namespace CodeAnalysis
                 BoundNodeKind.VariableExpression => EvaluateVariableExpression((BoundVariableExpression)expr),
                 BoundNodeKind.AssignmentExpression => EvaluateAssignmentExpression((BoundAssignmentExpression)expr),
                 BoundNodeKind.CallExpression => EvaluateCallExpression((BoundCallExpression)expr),
+                BoundNodeKind.ConversionExpression => EvaluateConversionExpression((BoundConversionExpression)expr),
                 _ => throw new ArgumentException($"Unexpected node {expr.Kind}"),
             };
+
+        private object EvaluateConversionExpression(BoundConversionExpression node)
+        {
+            var value = EvaluateExpression(node.Expression);
+            if (node.Type == TypeSymbol.Bool)
+                return Convert.ToBoolean(value);
+            if (node.Type == TypeSymbol.Int)
+                return Convert.ToInt32(value);
+            if (node.Type == TypeSymbol.String)
+                return Convert.ToString(value);
+
+            throw new Exception($"Unexpected type {node.Type}");
+        }
 
         private object EvaluateUnaryExpression(BoundUnaryExpression u)
         {

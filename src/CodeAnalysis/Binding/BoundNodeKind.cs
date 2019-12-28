@@ -24,5 +24,6 @@
         AssignmentExpression,
         ErrorExpression,
         CallExpression,
+        ConversionExpression,
     }
 }

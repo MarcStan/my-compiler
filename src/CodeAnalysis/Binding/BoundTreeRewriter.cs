@@ -16,6 +16,7 @@ namespace CodeAnalysis.Binding
                 BoundNodeKind.UnaryExpression => RewriteUnaryExpression((BoundUnaryExpression)node),
                 BoundNodeKind.BinaryExpression => RewriteBinaryExpression((BoundBinaryExpression)node),
                 BoundNodeKind.CallExpression => RewriteCallExpression((BoundCallExpression)node),
+                BoundNodeKind.ConversionExpression => RewriteConversionExpression((BoundConversionExpression)node),
                 _ => throw new ArgumentException($"Cannot rewrite {node.Kind}")
             };
 
@@ -34,7 +35,16 @@ namespace CodeAnalysis.Binding
                 _ => throw new ArgumentException($"Cannot rewrite {node.Kind}")
             };
 
-        private BoundExpression RewriteCallExpression(BoundCallExpression node)
+        protected virtual BoundExpression RewriteConversionExpression(BoundConversionExpression node)
+        {
+            var expression = RewriteExpression(node.Expression);
+            if (expression == node.Expression)
+                return node;
+
+            return new BoundConversionExpression(node.Type, expression);
+        }
+
+        protected virtual BoundExpression RewriteCallExpression(BoundCallExpression node)
         {
             ImmutableArray<BoundExpression>.Builder builder = null;
             for (int i = 0; i < node.Arguments.Length; i++)

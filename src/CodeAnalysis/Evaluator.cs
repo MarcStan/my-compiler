@@ -105,7 +105,9 @@ namespace CodeAnalysis
 
             return b.Operator.Kind switch
             {
-                BoundBinaryOperatorKind.Addition => (int)left + (int)right,
+                BoundBinaryOperatorKind.Addition => b.Type == TypeSymbol.Int ?
+                        (object)((int)left + (int)right) :
+                        (string)left + (string)right,
                 BoundBinaryOperatorKind.Subtraction => (int)left - (int)right,
                 BoundBinaryOperatorKind.Multiplication => (int)left * (int)right,
                 BoundBinaryOperatorKind.Division => (int)left / (int)right,

@@ -12,6 +12,7 @@ namespace CodeAnalysis
         private readonly Dictionary<VariableSymbol, object> _variables;
 
         private object _lastValue;
+        private Random _random;
 
         public Evaluator(BoundBlockStatement root, Dictionary<VariableSymbol, object> variables)
         {
@@ -110,6 +111,15 @@ namespace CodeAnalysis
                 var message = (string)EvaluateExpression(node.Arguments[0]);
                 Console.WriteLine(message);
                 return null;
+            }
+            else if (node.Function == BuiltinFunctions.Random)
+            {
+                var min = (int)EvaluateExpression(node.Arguments[0]);
+                var max = (int)EvaluateExpression(node.Arguments[1]);
+                if (_random == null)
+                    _random = new Random();
+
+                return _random.Next(min, max);
             }
             else
             {

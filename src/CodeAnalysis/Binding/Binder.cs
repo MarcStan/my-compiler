@@ -44,7 +44,18 @@ namespace CodeAnalysis.Binding
             return expr;
         }
 
-        public BoundExpression BindExpression(ExpressionSyntax syntax)
+        public BoundExpression BindExpression(ExpressionSyntax syntax, bool canBeVoid = false)
+        {
+            var res = BindExpressionInternal(syntax);
+            if (!canBeVoid && res.Type == TypeSymbol.Void)
+            {
+                Diagnostics.ReportExpressionMustHaveValue(syntax.Span);
+                return new BoundErrorExpression();
+            }
+            return res;
+        }
+
+        private BoundExpression BindExpressionInternal(ExpressionSyntax syntax)
             => syntax.Kind switch
             {
                 SyntaxKind.LiteralExpression => BindLiteralExpression((LiteralExpressionSyntax)syntax),
@@ -145,7 +156,7 @@ namespace CodeAnalysis.Binding
 
         private BoundStatement BindExpressionStatement(ExpressionStatementSyntax syntax)
         {
-            var exp = BindExpression(syntax.Expression);
+            var exp = BindExpression(syntax.Expression, true);
             return new BoundExpressionStatement(exp);
         }
 

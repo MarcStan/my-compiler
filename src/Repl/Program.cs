@@ -70,7 +70,15 @@ namespace Repl
                     previous.ContinueWith(syntaxTree);
 
                 var result = comp.Evaluate(variables);
-                if (result.Diagnostics.Any())
+
+                if (!result.Diagnostics.Any())
+                {
+                    previous = comp;
+
+                    if (result.Value != null)
+                        Console.WriteLine(result.Value);
+                }
+                else
                 {
                     foreach (var diag in result.Diagnostics)
                     {
@@ -99,17 +107,11 @@ namespace Repl
                         Console.WriteLine(suffix);
                     }
                 }
-                else
-                {
-                    previous = comp;
 
-                    if (showTree)
-                        syntaxTree.Root.WriteTo(Console.Out);
-                    if (showProgram)
-                        comp.EmitTree(Console.Out);
-
-                    Console.WriteLine(result.Value);
-                }
+                if (showTree)
+                    syntaxTree.Root.WriteTo(Console.Out);
+                if (showProgram)
+                    comp.EmitTree(Console.Out);
             }
         }
     }

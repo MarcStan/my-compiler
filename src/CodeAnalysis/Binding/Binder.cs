@@ -53,8 +53,43 @@ namespace CodeAnalysis.Binding
                 SyntaxKind.ParenthesizedExpression => BindParenthesizedExpression((ParenthesizedExpressionSyntax)syntax),
                 SyntaxKind.NameExpression => BindNameExpression((NameExpressionSyntax)syntax),
                 SyntaxKind.AssignmentExpression => BindAssignmentExpression((AssignmentExpressionSyntax)syntax),
+                SyntaxKind.CallExpression => BindCallExpression((CallExpressionSyntax)syntax),
                 _ => throw new ArgumentException($"Unexpected syntax {syntax.Kind}"),
             };
+
+        private BoundExpression BindCallExpression(CallExpressionSyntax syntax)
+        {
+            var functions = BuiltinFunctions.GetAll();
+
+            var function = functions.SingleOrDefault(f => f.Name == syntax.Identifier.Text);
+            if (function == null)
+            {
+                Diagnostics.ReportUndefinedFunction(syntax.Identifier.Span, syntax.Identifier.Text);
+                return new BoundErrorExpression();
+            }
+            if (syntax.Arguments.Count != function.Parameters.Length)
+            {
+                Diagnostics.ReportWrongArgumentCount(syntax.Span, syntax.Identifier.Text, function.Parameters.Length, syntax.Arguments.Count);
+                return new BoundErrorExpression();
+            }
+
+            var boundArguments = ImmutableArray.CreateBuilder<BoundExpression>(syntax.Arguments.Count);
+            foreach (var arg in syntax.Arguments)
+                boundArguments.Add(BindExpression(arg));
+
+            for (int i = 0; i < boundArguments.Count; i++)
+            {
+                var arg = boundArguments[i];
+                var parameter = function.Parameters[i];
+                if (arg.Type != parameter.Type)
+                {
+                    Diagnostics.ReportWrongArgumentType(syntax.Span, function.Name, parameter.Name, parameter.Type, arg.Type);
+                    return new BoundErrorExpression();
+                }
+            }
+
+            return new BoundCallExpression(function, boundArguments.MoveToImmutable());
+        }
 
         public BoundStatement BindStatement(StatementSyntax syntax)
             => syntax.Kind switch

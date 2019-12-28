@@ -33,6 +33,7 @@
         TildeToken,
         HatToken,
         StringToken,
+        CommaToken,
 
         // expressions
         LiteralExpression,
@@ -41,6 +42,7 @@
         BinaryExpression,
         ParenthesizedExpression,
         AssignmentExpression,
+        CallExpression,
 
         // keyword
         ElseKeyword,

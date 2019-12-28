@@ -53,5 +53,14 @@ namespace CodeAnalysis
 
         public void ReportUnterminatedString(TextSpan span)
             => Report(span, "Unterminated string literal.");
+
+        public void ReportUndefinedFunction(TextSpan span, string text)
+            => Report(span, $"Undefined function '{text}'.");
+
+        public void ReportWrongArgumentCount(TextSpan span, string name, int expected, int actual)
+            => Report(span, $"Function '{name}' requires {expected} arguments but was given {actual}.");
+
+        public void ReportWrongArgumentType(TextSpan span, string functionName, string argName, TypeSymbol expected, TypeSymbol actual)
+            => Report(span, $"Function '{functionName}' requires argument '{argName}' to be of type {expected} but received {actual}.");
     }
 }

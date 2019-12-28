@@ -68,6 +68,10 @@ namespace CodeAnalysis.Syntax
                     _kind = SyntaxKind.CloseParenthesisToken;
                     _position++;
                     break;
+                case ',':
+                    _kind = SyntaxKind.CommaToken;
+                    _position++;
+                    break;
                 case '{':
                     _kind = SyntaxKind.OpenBraceToken;
                     _position++;

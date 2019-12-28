@@ -15,6 +15,7 @@ namespace CodeAnalysis.Binding
                 BoundNodeKind.AssignmentExpression => RewriteAssignmentExpression((BoundAssignmentExpression)node),
                 BoundNodeKind.UnaryExpression => RewriteUnaryExpression((BoundUnaryExpression)node),
                 BoundNodeKind.BinaryExpression => RewriteBinaryExpression((BoundBinaryExpression)node),
+                BoundNodeKind.CallExpression => RewriteCallExpression((BoundCallExpression)node),
                 _ => throw new ArgumentException($"Cannot rewrite {node.Kind}")
             };
 
@@ -32,6 +33,33 @@ namespace CodeAnalysis.Binding
                 BoundNodeKind.ConditionalGoToStatement => RewriteConditionalGoToStatement((BoundConditionalGoToStatement)node),
                 _ => throw new ArgumentException($"Cannot rewrite {node.Kind}")
             };
+
+        private BoundExpression RewriteCallExpression(BoundCallExpression node)
+        {
+            ImmutableArray<BoundExpression>.Builder builder = null;
+            for (int i = 0; i < node.Arguments.Length; i++)
+            {
+                var oldArg = node.Arguments[i];
+                var newArg = RewriteExpression(oldArg);
+                if (newArg != oldArg)
+                {
+                    if (builder == null)
+                    {
+                        builder = ImmutableArray.CreateBuilder<BoundExpression>(node.Arguments.Length);
+                        for (int j = 0; j < i; j++)
+                            builder.Add(node.Arguments[j]);
+                    }
+                }
+
+                if (builder != null)
+                    builder.Add(newArg);
+            }
+
+            if (builder == null)
+                return node;
+
+            return new BoundCallExpression(node.Function, builder.MoveToImmutable());
+        }
 
         protected virtual BoundStatement RewriteConditionalGoToStatement(BoundConditionalGoToStatement node)
         {

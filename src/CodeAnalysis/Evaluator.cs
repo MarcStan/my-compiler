@@ -82,6 +82,7 @@ namespace CodeAnalysis
                 BoundNodeKind.LiteralExpression => EvaluateLiteralExpression((BoundLiteralExpression)expr),
                 BoundNodeKind.VariableExpression => EvaluateVariableExpression((BoundVariableExpression)expr),
                 BoundNodeKind.AssignmentExpression => EvaluateAssignmentExpression((BoundAssignmentExpression)expr),
+                BoundNodeKind.CallExpression => EvaluateCallExpression((BoundCallExpression)expr),
                 _ => throw new ArgumentException($"Unexpected node {expr.Kind}"),
             };
 
@@ -96,6 +97,24 @@ namespace CodeAnalysis
                 BoundUnaryOperatorKind.OnesComplement => ~(int)operand,
                 _ => throw new ArgumentException($"Unexpected unary operator {u.Operator}"),
             };
+        }
+
+        private object EvaluateCallExpression(BoundCallExpression node)
+        {
+            if (node.Function == BuiltinFunctions.Input)
+            {
+                return Console.ReadLine();
+            }
+            else if (node.Function == BuiltinFunctions.Print)
+            {
+                var message = (string)EvaluateExpression(node.Arguments[0]);
+                Console.WriteLine(message);
+                return null;
+            }
+            else
+            {
+                throw new Exception($"Undefined function {node.Function.Name}!");
+            }
         }
 
         private object EvaluateBinaryExpression(BoundBinaryExpression b)

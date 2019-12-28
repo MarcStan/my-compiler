@@ -23,5 +23,6 @@
         VariableExpression,
         AssignmentExpression,
         ErrorExpression,
+        CallExpression,
     }
 }

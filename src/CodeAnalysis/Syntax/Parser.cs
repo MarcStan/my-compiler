@@ -232,7 +232,7 @@ namespace CodeAnalysis.Syntax
                     boolean == SyntaxKind.TrueKeyword ||
                     boolean == SyntaxKind.FalseKeyword
                 => ParseBooleanLiteral(),
-                _ => ParseNameExpression()
+                _ => ParseNameOrCallExpression()
             };
 
         private ExpressionSyntax ParseNumberLiteral()
@@ -260,6 +260,42 @@ namespace CodeAnalysis.Syntax
             var isTrue = Current.Kind == SyntaxKind.TrueKeyword;
             var token = isTrue ? MatchToken(SyntaxKind.TrueKeyword) : MatchToken(SyntaxKind.FalseKeyword);
             return new LiteralExpressionSyntax(token, isTrue);
+        }
+
+        private ExpressionSyntax ParseNameOrCallExpression()
+        {
+            if (Peek(0).Kind == SyntaxKind.IdentifierToken &&
+                Peek(1).Kind == SyntaxKind.OpenParenthesisToken)
+                return ParseCallExpression();
+
+            return ParseNameExpression();
+        }
+
+        private ExpressionSyntax ParseCallExpression()
+        {
+            var identifier = MatchToken(SyntaxKind.IdentifierToken);
+            var open = MatchToken(SyntaxKind.OpenParenthesisToken);
+            var args = ParseArguments();
+            var close = MatchToken(SyntaxKind.CloseParenthesisToken);
+            return new CallExpressionSyntax(identifier, open, args, close);
+        }
+
+        private SeparatedSyntaxList<ExpressionSyntax> ParseArguments()
+        {
+            var nodesAndSeparators = ImmutableArray.CreateBuilder<SyntaxNode>();
+            while (Current.Kind != SyntaxKind.EndOfFileToken &&
+                   Current.Kind != SyntaxKind.CloseParenthesisToken)
+            {
+                var expression = ParseExpression();
+                nodesAndSeparators.Add(expression);
+
+                if (Current.Kind != SyntaxKind.CloseParenthesisToken)
+                {
+                    var comma = MatchToken(SyntaxKind.CommaToken);
+                    nodesAndSeparators.Add(comma);
+                }
+            }
+            return new SeparatedSyntaxList<ExpressionSyntax>(nodesAndSeparators.ToImmutable());
         }
 
         private ExpressionSyntax ParseNameExpression()

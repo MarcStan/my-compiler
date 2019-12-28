@@ -1,4 +1,5 @@
-﻿using CodeAnalysis.Text;
+﻿using CodeAnalysis.Syntax.Nodes;
+using CodeAnalysis.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,6 +39,12 @@ namespace CodeAnalysis.Syntax
                     foreach (var child in children)
                         if (child != null)
                             yield return child;
+                }
+                else if (typeof(SeparatedSyntaxList).IsAssignableFrom(property.PropertyType))
+                {
+                    var list = (SeparatedSyntaxList)property.GetValue(this);
+                    foreach (var child in list.GetWithSeparators())
+                        yield return child;
                 }
             }
         }

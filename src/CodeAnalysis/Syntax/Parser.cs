@@ -81,6 +81,8 @@ namespace CodeAnalysis.Syntax
                     return ParseIfStatement();
                 case SyntaxKind.ForKeyword:
                     return ParseForStatement();
+                case SyntaxKind.DoKeyword:
+                    return ParseDoWhileStatement();
                 case SyntaxKind.WhileKeyword:
                     return ParseWhileStatement();
                 default:
@@ -99,6 +101,16 @@ namespace CodeAnalysis.Syntax
             var body = ParseStatement();
 
             return new ForStatementSyntax(keyword, identifier, equals, lowerBound, to, upperBound, body);
+        }
+
+        private StatementSyntax ParseDoWhileStatement()
+        {
+            var keyword = MatchToken(SyntaxKind.DoKeyword);
+            var body = ParseStatement();
+            var whileKeyword = MatchToken(SyntaxKind.WhileKeyword);
+            var condition = ParseExpression();
+
+            return new DoWhileStatementSyntax(keyword, body, whileKeyword, condition);
         }
 
         private StatementSyntax ParseWhileStatement()

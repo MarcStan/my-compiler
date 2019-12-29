@@ -52,6 +52,7 @@
         FalseKeyword,
         TrueKeyword,
         IdentifierToken,
+        DoKeyword,
         WhileKeyword,
         ForKeyword,
         ToKeyword,
@@ -66,6 +67,7 @@
         IfStatement,
         WhileStatement,
         ForStatement,
+        DoWhileStatement,
 
         VariableDeclaration,
     }

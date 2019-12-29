@@ -28,6 +28,7 @@ namespace CodeAnalysis.Binding
                 BoundNodeKind.ForStatement => RewriteForStatement((BoundForStatement)node),
                 BoundNodeKind.IfStatement => RewriteIfStatement((BoundIfStatement)node),
                 BoundNodeKind.VariableDeclaration => RewriteVariableDeclaration((BoundVariableDeclaration)node),
+                BoundNodeKind.DoWhileStatement => RewriteDoWhileStatement((BoundDoWhileStatement)node),
                 BoundNodeKind.WhileStatement => RewriteWhileStatement((BoundWhileStatement)node),
                 BoundNodeKind.LabelStatement => RewriteLabelStatement((BoundLabelStatement)node),
                 BoundNodeKind.GoToStatement => RewriteGoToStatement((BoundGoToStatement)node),
@@ -93,6 +94,17 @@ namespace CodeAnalysis.Binding
                 return node;
 
             return new BoundVariableDeclaration(node.Variable, initializer);
+        }
+
+        protected virtual BoundStatement RewriteDoWhileStatement(BoundDoWhileStatement node)
+        {
+            var body = RewriteStatement(node.Body);
+            var condition = RewriteExpression(node.Condition);
+            if (body == node.Body &&
+                condition == node.Condition)
+                return node;
+
+            return new BoundDoWhileStatement(body, condition);
         }
 
         protected virtual BoundStatement RewriteWhileStatement(BoundWhileStatement node)

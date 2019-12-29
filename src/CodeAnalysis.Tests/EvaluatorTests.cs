@@ -69,6 +69,7 @@ namespace CodeAnalysis.Tests
         [TestCase("{ var a = 10 if a == 10 a else a * 3 }", 10)]
         [TestCase("{ var i = 0 var a = 0 while i < 10 { a = a + 2 i = i + 1 } a }", 20)]
         [TestCase("{ var a = 0 for i = 0 to 10 { a = i + a } a }", 55)]
+        [TestCase("{ var a = 0 do { a = a + 1 } while a < 10 a }", 10)]
         public void Expressions_should_evaluate_correctly(string text, object expected)
         {
             var syntaxTree = SyntaxTree.Parse(text);
@@ -80,6 +81,28 @@ namespace CodeAnalysis.Tests
 
             actual.Diagnostics.Should().BeEmpty();
             actual.Value.Should().Be(expected);
+        }
+
+        [Test]
+        public void DoWhile_should_report_type_mismatch_when_condition_is_not_of_type_bool()
+        {
+            var text = @"
+                {
+                    var x = 0
+                    do
+                    {
+                    x = 10    
+
+                    }
+                    while [10]
+                }
+            ";
+
+            var diagnostics = @"
+                Cannot convert type 'int' to 'bool'.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
         }
 
         [Test]

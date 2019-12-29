@@ -124,6 +124,27 @@ namespace CodeAnalysis.Lowering
                 ImmutableArray.Create(goToCheckStatement, loopLabelStatement, node.Body, checkLabelStatement, goToStatement)));
         }
 
+        protected override BoundStatement RewriteDoWhileStatement(BoundDoWhileStatement node)
+        {
+            /* do
+             *     <body>
+             * while <condition>
+             *
+             * ==>
+             *
+             * loop:
+             *     <body>
+             * goToTrue <condition> loop
+             * 
+             */
+            var loopLabel = GenerateLabel();
+            var loopLabelStatement = new BoundLabelStatement(loopLabel);
+            var goToStatement = new BoundConditionalGoToStatement(loopLabel, node.Condition);
+
+            return RewriteStatement(new BoundBlockStatement(
+                ImmutableArray.Create(loopLabelStatement, node.Body, goToStatement)));
+        }
+
         protected override BoundStatement RewriteForStatement(BoundForStatement node)
         {
             /*

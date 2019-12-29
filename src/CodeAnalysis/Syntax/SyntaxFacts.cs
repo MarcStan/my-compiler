@@ -64,6 +64,7 @@ namespace CodeAnalysis.Syntax
                 "var" => SyntaxKind.VarKeyword,
                 "to" => SyntaxKind.ToKeyword,
                 "while" => SyntaxKind.WhileKeyword,
+                "do" => SyntaxKind.DoKeyword,
                 _ => SyntaxKind.IdentifierToken,
             };
 
@@ -100,6 +101,7 @@ namespace CodeAnalysis.Syntax
                 SyntaxKind.TrueKeyword => "true",
                 SyntaxKind.VarKeyword => "var",
                 SyntaxKind.ToKeyword => "to",
+                SyntaxKind.DoKeyword => "do",
                 SyntaxKind.WhileKeyword => "while",
                 SyntaxKind.LetKeyword => "let",
                 _ => null

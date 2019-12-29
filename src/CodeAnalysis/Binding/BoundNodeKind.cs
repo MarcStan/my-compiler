@@ -10,6 +10,7 @@
         ForStatement,
         IfStatement,
         WhileStatement,
+        DoWhileStatement,
         GoToStatement,
         LabelStatement,
         ConditionalGoToStatement,

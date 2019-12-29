@@ -126,9 +126,18 @@ namespace CodeAnalysis.Binding
                 SyntaxKind.ForStatement => BindForStatement((ForStatementSyntax)syntax),
                 SyntaxKind.IfStatement => BindIfStatement((IfStatementSyntax)syntax),
                 SyntaxKind.VariableDeclaration => BindVariableDeclaration((VariableDeclarationSyntax)syntax),
+                SyntaxKind.DoWhileStatement => BindDoWhileStatement((DoWhileStatementSyntax)syntax),
                 SyntaxKind.WhileStatement => BindWhileStatement((WhileStatementSyntax)syntax),
                 _ => throw new ArgumentException($"Unexpected syntax {syntax.Kind}"),
             };
+
+        private BoundStatement BindDoWhileStatement(DoWhileStatementSyntax syntax)
+        {
+            var body = BindStatement(syntax.Body);
+            var condition = BindExpression(syntax.Condition, TypeSymbol.Bool);
+
+            return new BoundDoWhileStatement(body, condition);
+        }
 
         private BoundStatement BindForStatement(ForStatementSyntax syntax)
         {

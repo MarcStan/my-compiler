@@ -149,7 +149,7 @@ namespace CodeAnalysis.Tests
             var text = @"
                 {
                     var x = 10
-                    x = [true]
+                    [x = true]
                 }
             ";
 

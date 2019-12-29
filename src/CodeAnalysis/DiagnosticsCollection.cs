@@ -51,11 +51,20 @@ namespace CodeAnalysis
         public void ReportCannotConvert(TextSpan span, TypeSymbol fromType, TypeSymbol toType)
             => Report(span, $"Cannot convert type '{fromType}' to '{toType}'.");
 
+        public void ReportParameterAlreadyDeclared(TextSpan span, string name)
+            => Report(span, $"Parameter {name} declared multiple times.");
+
         public void ReportCannotAssign(TextSpan span, string name)
             => Report(span, $"Variable '{name}' is read-only and cannot be assigned to.");
 
         public void ReportUnterminatedString(TextSpan span)
             => Report(span, "Unterminated string literal.");
+
+        public void ReportFunctionsAreUnsupported(TextSpan span)
+            => Report(span, "Functions with return types are not yet supported.");
+
+        public void ReportFunctionAlreadyDeclared(TextSpan span, string name)
+            => Report(span, $"Function '{name}' already declared.");
 
         public void ReportUndefinedFunction(TextSpan span, string text)
             => Report(span, $"Undefined function '{text}'.");

@@ -65,6 +65,7 @@ namespace CodeAnalysis.Syntax
                 "to" => SyntaxKind.ToKeyword,
                 "while" => SyntaxKind.WhileKeyword,
                 "do" => SyntaxKind.DoKeyword,
+                "function" => SyntaxKind.FunctionKeyword,
                 _ => SyntaxKind.IdentifierToken,
             };
 
@@ -99,6 +100,7 @@ namespace CodeAnalysis.Syntax
                 SyntaxKind.FalseKeyword => "false",
                 SyntaxKind.IfKeyword => "if",
                 SyntaxKind.ForKeyword => "for",
+                SyntaxKind.FunctionKeyword => "function",
                 SyntaxKind.TrueKeyword => "true",
                 SyntaxKind.VarKeyword => "var",
                 SyntaxKind.ToKeyword => "to",

@@ -10,7 +10,7 @@
         {
             Identifier = identifier;
             OpenParenthesis = openParenthesis;
-            Parameters = arguments;
+            Arguments = arguments;
             CloseParenthesis = closeParenthesis;
         }
 
@@ -18,7 +18,7 @@
 
         public SyntaxToken Identifier { get; }
         public SyntaxToken OpenParenthesis { get; }
-        public SeparatedSyntaxList<ExpressionSyntax> Parameters { get; }
+        public SeparatedSyntaxList<ExpressionSyntax> Arguments { get; }
         public SyntaxToken CloseParenthesis { get; }
     }
 }

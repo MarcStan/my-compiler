@@ -8,32 +8,41 @@ namespace CodeAnalysis
 {
     internal sealed class Evaluator
     {
-        private readonly BoundBlockStatement _root;
-        private readonly Dictionary<VariableSymbol, object> _variables;
+        private readonly BoundProgram _program;
+        private readonly Dictionary<VariableSymbol, object> _globals;
+        private readonly Stack<Dictionary<VariableSymbol, object>> _locals = new Stack<Dictionary<VariableSymbol, object>>();
 
         private object _lastValue;
         private Random _random;
 
-        public Evaluator(BoundBlockStatement root, Dictionary<VariableSymbol, object> variables)
+        public Evaluator(
+            BoundProgram program,
+            Dictionary<VariableSymbol, object> variables)
         {
-            _root = root;
-            _variables = variables;
+            _program = program;
+            _globals = variables;
+            _locals.Push(new Dictionary<VariableSymbol, object>());
         }
 
         public object Evaluate()
         {
+            return EvaluateStatement(_program.Statement);
+        }
+
+        private object EvaluateStatement(BoundBlockStatement body)
+        {
             var labelToIndex = new Dictionary<BoundLabel, int>();
 
-            for (int i = 0; i < _root.Statements.Length; i++)
+            for (int i = 0; i < body.Statements.Length; i++)
             {
-                if (_root.Statements[i] is BoundLabelStatement l)
+                if (body.Statements[i] is BoundLabelStatement l)
                     labelToIndex.Add(l.Label, i);
             }
 
             int index = 0;
-            while (index < _root.Statements.Length)
+            while (index < body.Statements.Length)
             {
-                var s = _root.Statements[index++];
+                var s = body.Statements[index++];
                 switch (s.Kind)
                 {
                     case BoundNodeKind.ExpressionStatement:
@@ -66,8 +75,17 @@ namespace CodeAnalysis
         private void EvaluateVariableDeclaration(BoundVariableDeclaration node)
         {
             var value = EvaluateExpression(node.Initializer);
-            _variables[node.Variable] = value;
-            _lastValue = value;
+
+            _lastValue = Assign(node.Variable, value);
+        }
+
+        private object Assign(VariableSymbol variable, object value)
+        {
+            var data = variable.Kind == SymbolKind.GlobalVariable ?
+                _globals :
+                _locals.Peek();
+
+            return data[variable] = value;
         }
 
         private void EvaluateExpressionStatement(BoundExpressionStatement node)
@@ -137,7 +155,15 @@ namespace CodeAnalysis
             }
             else
             {
-                throw new Exception($"Undefined function {node.Function.Name}!");
+                var locals = new Dictionary<VariableSymbol, object>();
+                for (int i = 0; i < node.Arguments.Length; i++)
+                    locals.Add(node.Function.Parameters[i], EvaluateExpression(node.Arguments[i]));
+
+                _locals.Push(locals);
+                var statement = _program.Functions[node.Function];
+                var result = EvaluateStatement(statement);
+                _locals.Pop();
+                return result;
             }
         }
 
@@ -178,12 +204,17 @@ namespace CodeAnalysis
         private object EvaluateAssignmentExpression(BoundAssignmentExpression a)
         {
             var value = EvaluateExpression(a.Expression);
-            _variables[a.Variable] = value;
-            return value;
+            return Assign(a.Variable, value);
         }
 
         private object EvaluateVariableExpression(BoundVariableExpression v)
-            => _variables[v.Variable];
+        {
+            var data = v.Variable.Kind == SymbolKind.GlobalVariable ?
+                _globals :
+                _locals.Peek();
+
+            return data[v.Variable];
+        }
 
         private object EvaluateLiteralExpression(BoundLiteralExpression n)
             => n.Value;

@@ -4,6 +4,7 @@ using CodeAnalysis.Tests.Helpers;
 using FluentAssertions;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CodeAnalysis.Tests
 {
@@ -143,10 +144,10 @@ namespace CodeAnalysis.Tests
 
         private ExpressionSyntax ParseExpression(string text)
         {
-            var statement = SyntaxTree.Parse(text).Root.Statement;
-            statement.Should().BeOfType<ExpressionStatementSyntax>();
+            var statement = SyntaxTree.Parse(text).Root.Members.Single();
+            statement.Should().BeOfType<GlobalStatementSyntax>();
 
-            return ((ExpressionStatementSyntax)statement).Expression;
+            return ((ExpressionStatementSyntax)((GlobalStatementSyntax)statement).Statement).Expression;
         }
     }
 }

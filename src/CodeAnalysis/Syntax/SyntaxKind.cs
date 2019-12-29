@@ -57,11 +57,13 @@
         WhileKeyword,
         ForKeyword,
         ToKeyword,
+        FunctionKeyword,
 
         // nodes
         CompilationUnit,
         ElseClause,
         TypeClause,
+        Parameter,
 
         // statements
         BlockStatement,
@@ -70,7 +72,9 @@
         WhileStatement,
         ForStatement,
         DoWhileStatement,
+        GlobalStatement,
 
         VariableDeclaration,
+        FunctionDeclaration,
     }
 }

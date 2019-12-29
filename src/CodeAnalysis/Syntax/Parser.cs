@@ -63,9 +63,56 @@ namespace CodeAnalysis.Syntax
 
         public CompilationUnitSyntax ParseCompilationUnit()
         {
-            var statement = ParseStatement();
+            var members = ParseMembers();
             var eof = MatchToken(SyntaxKind.EndOfFileToken);
-            return new CompilationUnitSyntax(statement, eof);
+            return new CompilationUnitSyntax(members, eof);
+        }
+
+        private ImmutableArray<MemberSyntax> ParseMembers()
+        {
+            var members = ImmutableArray.CreateBuilder<MemberSyntax>();
+
+            while (Current.Kind != SyntaxKind.EndOfFileToken)
+            {
+                var startToken = Current;
+
+                members.Add(ParseMember());
+
+                // if token was not consumed, skip it
+                // to prevent infinite loop in parser
+                if (Current == startToken)
+                {
+                    GetNextToken();
+                }
+            }
+
+            return members.ToImmutable();
+        }
+
+        private MemberSyntax ParseMember()
+        {
+            if (Current.Kind == SyntaxKind.FunctionKeyword)
+                return ParseFunctionDeclaration();
+            else
+                return ParseGlobalStatement();
+        }
+
+        private MemberSyntax ParseFunctionDeclaration()
+        {
+            var func = MatchToken(SyntaxKind.FunctionKeyword);
+            var identifier = MatchToken(SyntaxKind.IdentifierToken);
+            var open = MatchToken(SyntaxKind.OpenParenthesisToken);
+            var parameters = ParseParameters();
+            var close = MatchToken(SyntaxKind.CloseParenthesisToken);
+            var typeClause = ParseOptionalTypeClause();
+            var body = ParseBlockStatement();
+            return new FunctionDeclarationSyntax(func, identifier, open, parameters, close, typeClause, body);
+        }
+
+        private MemberSyntax ParseGlobalStatement()
+        {
+            var statement = ParseStatement();
+            return new GlobalStatementSyntax(statement);
         }
 
         private StatementSyntax ParseStatement()
@@ -325,6 +372,31 @@ namespace CodeAnalysis.Syntax
                 }
             }
             return new SeparatedSyntaxList<ExpressionSyntax>(nodesAndSeparators.ToImmutable());
+        }
+
+        private SeparatedSyntaxList<ParameterSyntax> ParseParameters()
+        {
+            var nodesAndSeparators = ImmutableArray.CreateBuilder<SyntaxNode>();
+            while (Current.Kind != SyntaxKind.EndOfFileToken &&
+                   Current.Kind != SyntaxKind.CloseParenthesisToken)
+            {
+                var p = ParseParameter();
+                nodesAndSeparators.Add(p);
+
+                if (Current.Kind != SyntaxKind.CloseParenthesisToken)
+                {
+                    var comma = MatchToken(SyntaxKind.CommaToken);
+                    nodesAndSeparators.Add(comma);
+                }
+            }
+            return new SeparatedSyntaxList<ParameterSyntax>(nodesAndSeparators.ToImmutable());
+        }
+
+        private ParameterSyntax ParseParameter()
+        {
+            var identifier = MatchToken(SyntaxKind.IdentifierToken);
+            var typeClause = ParseTypeClause();
+            return new ParameterSyntax(identifier, typeClause);
         }
 
         private ExpressionSyntax ParseNameExpression()

@@ -34,6 +34,7 @@
         HatToken,
         StringToken,
         CommaToken,
+        ColonToken,
 
         // expressions
         LiteralExpression,
@@ -60,6 +61,7 @@
         // nodes
         CompilationUnit,
         ElseClause,
+        TypeClause,
 
         // statements
         BlockStatement,

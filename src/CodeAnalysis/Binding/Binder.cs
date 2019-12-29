@@ -67,7 +67,7 @@ namespace CodeAnalysis.Binding
             if (syntax.Parameters.Count == 1 &&
                 LookupType(syntax.Identifier.Text) is TypeSymbol type)
             {
-                return BindConversion(syntax.Parameters[0], type);
+                return BindConversion(syntax.Parameters[0], type, true);
             }
 
             if (!_scope.TryLookupFunction(syntax.Identifier.Text, out var function))
@@ -99,10 +99,10 @@ namespace CodeAnalysis.Binding
             return new BoundCallExpression(function, boundArguments.MoveToImmutable());
         }
 
-        private BoundExpression BindConversion(ExpressionSyntax syntax, TypeSymbol type)
-            => BindConversion(syntax.Span, BindExpression(syntax), type);
+        private BoundExpression BindConversion(ExpressionSyntax syntax, TypeSymbol type, bool allowExplicitConversion = false)
+            => BindConversion(syntax.Span, BindExpression(syntax), type, allowExplicitConversion);
 
-        private BoundExpression BindConversion(TextSpan span, BoundExpression expression, TypeSymbol type)
+        private BoundExpression BindConversion(TextSpan span, BoundExpression expression, TypeSymbol type, bool allowExplicitConversion = false)
         {
             var conversion = Conversion.Classify(expression.Type, type);
 
@@ -114,6 +114,9 @@ namespace CodeAnalysis.Binding
 
                 return new BoundErrorExpression();
             }
+            if (!allowExplicitConversion && conversion.IsExplicit)
+                Diagnostics.ReportCannotConvert(span, expression.Type, type);
+
 
             if (conversion.IsIdentity)
                 return expression;
@@ -176,10 +179,25 @@ namespace CodeAnalysis.Binding
         private BoundStatement BindVariableDeclaration(VariableDeclarationSyntax syntax)
         {
             var isReadOnly = syntax.Keyword.Kind == SyntaxKind.LetKeyword;
+            var type = BindTypeClause(syntax.TypeClause);
             var initializer = BindExpression(syntax.Initializer);
-            var variable = BindVariable(syntax.Identifier, isReadOnly, initializer.Type);
+            var variableType = type ?? initializer.Type;
+            var convertedInitializer = BindConversion(syntax.Initializer.Span, initializer, variableType);
+            var variable = BindVariable(syntax.Identifier, isReadOnly, variableType);
 
-            return new BoundVariableDeclaration(variable, initializer);
+            return new BoundVariableDeclaration(variable, convertedInitializer);
+        }
+
+        private TypeSymbol BindTypeClause(TypeClauseSyntax syntax)
+        {
+            if (syntax == null)
+                return null;
+
+            var type = LookupType(syntax.Identifier.Text);
+            if (type == null)
+                Diagnostics.ReportUndefinedType(syntax.Identifier.Span, syntax.Identifier.Text);
+
+            return type;
         }
 
         private BoundStatement BindExpressionStatement(ExpressionStatementSyntax syntax)

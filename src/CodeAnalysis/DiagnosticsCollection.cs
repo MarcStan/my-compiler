@@ -65,5 +65,8 @@ namespace CodeAnalysis
 
         public void ReportWrongArgumentType(TextSpan span, string functionName, string argName, TypeSymbol expected, TypeSymbol actual)
             => Report(span, $"Function '{functionName}' requires argument '{argName}' to be of type {expected} but received {actual}.");
+
+        public void ReportUndefinedType(TextSpan span, string name)
+            => Report(span, $"Type '{name}' does not exist.");
     }
 }

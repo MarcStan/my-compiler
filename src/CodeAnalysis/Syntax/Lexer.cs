@@ -104,6 +104,10 @@ namespace CodeAnalysis.Syntax
                         _kind = SyntaxKind.PipeToken;
                     }
                     break;
+                case ':':
+                    _kind = SyntaxKind.ColonToken;
+                    _position++;
+                    break;
                 case '^':
                     _kind = SyntaxKind.HatToken;
                     _position++;

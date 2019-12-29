@@ -91,6 +91,7 @@ namespace CodeAnalysis.Syntax
                 SyntaxKind.BangEqualsToken => "!=",
                 SyntaxKind.OpenParenthesisToken => "(",
                 SyntaxKind.CloseParenthesisToken => ")",
+                SyntaxKind.ColonToken => ":",
                 SyntaxKind.CommaToken => ",",
                 SyntaxKind.OpenBraceToken => "{",
                 SyntaxKind.CloseBraceToken => "}",

@@ -75,6 +75,8 @@
         ForStatement,
         DoWhileStatement,
         GlobalStatement,
+        BreakStatement,
+        ContinueStatement,
 
         VariableDeclaration,
         FunctionDeclaration,

@@ -110,18 +110,24 @@ namespace CodeAnalysis.Lowering
              *     <body>
              * check:
              * goToTrue <condition> loop
-             * 
+             * break:
              */
 
             var checkLabel = GenerateLabel();
-            var loopLabel = GenerateLabel();
-            var goToCheckStatement = new BoundGoToStatement(checkLabel);
-            var loopLabelStatement = new BoundLabelStatement(loopLabel);
-            var checkLabelStatement = new BoundLabelStatement(checkLabel);
-            var goToStatement = new BoundConditionalGoToStatement(loopLabel, node.Condition);
 
-            return RewriteStatement(new BoundBlockStatement(
-                ImmutableArray.Create(goToCheckStatement, loopLabelStatement, node.Body, checkLabelStatement, goToStatement)));
+            var goToCheck = new BoundGoToStatement(checkLabel);
+            var continueLabelStatement = new BoundLabelStatement(node.ContinueLabel);
+            var checkLabelStatement = new BoundLabelStatement(checkLabel);
+            var goToStatement = new BoundConditionalGoToStatement(node.ContinueLabel, node.Condition);
+            var breakLabelStatement = new BoundLabelStatement(node.BreakLabel);
+
+            return RewriteStatement(new BoundBlockStatement(ImmutableArray.Create(
+                    goToCheck,
+                    continueLabelStatement,
+                    node.Body,
+                    checkLabelStatement,
+                    goToStatement,
+                    breakLabelStatement)));
         }
 
         protected override BoundStatement RewriteDoWhileStatement(BoundDoWhileStatement node)
@@ -135,14 +141,17 @@ namespace CodeAnalysis.Lowering
              * loop:
              *     <body>
              * goToTrue <condition> loop
-             * 
+             * break:
              */
-            var loopLabel = GenerateLabel();
-            var loopLabelStatement = new BoundLabelStatement(loopLabel);
-            var goToStatement = new BoundConditionalGoToStatement(loopLabel, node.Condition);
+            var loopLabelStatement = new BoundLabelStatement(node.ContinueLabel);
+            var goToStatement = new BoundConditionalGoToStatement(node.ContinueLabel, node.Condition);
+            var breakLabelStatement = new BoundLabelStatement(node.BreakLabel);
 
-            return RewriteStatement(new BoundBlockStatement(
-                ImmutableArray.Create(loopLabelStatement, node.Body, goToStatement)));
+            return RewriteStatement(new BoundBlockStatement(ImmutableArray.Create(
+                loopLabelStatement,
+                node.Body,
+                goToStatement,
+                breakLabelStatement)));
         }
 
         protected override BoundStatement RewriteForStatement(BoundForStatement node)
@@ -169,6 +178,7 @@ namespace CodeAnalysis.Lowering
                 BoundBinaryOperator.Bind(SyntaxKind.LessOrEqualsToken, TypeSymbol.Int, TypeSymbol.Int),
                 new BoundVariableExpression(upperBoundSymbol));
 
+            var continueLabelStatement = new BoundLabelStatement(node.ContinueLabel);
             var increment = new BoundExpressionStatement(
                 new BoundAssignmentExpression(
                     node.Variable,
@@ -177,9 +187,9 @@ namespace CodeAnalysis.Lowering
                         BoundBinaryOperator.Bind(SyntaxKind.PlusToken, TypeSymbol.Int, TypeSymbol.Int),
                         new BoundLiteralExpression(1))));
 
-            var whileBody = new BoundBlockStatement(ImmutableArray.Create(node.Body, increment));
+            var whileBody = new BoundBlockStatement(ImmutableArray.Create(node.Body, continueLabelStatement, increment));
 
-            var whileStatement = new BoundWhileStatement(condition, whileBody);
+            var whileStatement = new BoundWhileStatement(condition, whileBody, node.BreakLabel, GenerateLabel());
 
             var result = new BoundBlockStatement(
                 ImmutableArray.Create<BoundStatement>(

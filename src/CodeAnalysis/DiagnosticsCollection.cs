@@ -77,5 +77,8 @@ namespace CodeAnalysis
 
         public void ReportUndefinedType(TextSpan span, string name)
             => Report(span, $"Type '{name}' does not exist.");
+
+        public void ReportInvalidBreakOrContinue(TextSpan span, string text)
+            => Report(span, $"The keyword {text} can only be used in loops.");
     }
 }

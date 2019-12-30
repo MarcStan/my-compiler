@@ -5,16 +5,16 @@
         public WhileStatementSyntax(
             SyntaxToken whileKeyword,
             ExpressionSyntax condition,
-            StatementSyntax statement)
+            StatementSyntax body)
         {
             WhileKeyword = whileKeyword;
             Condition = condition;
-            Statement = statement;
+            Body = body;
         }
 
         public SyntaxToken WhileKeyword { get; }
         public ExpressionSyntax Condition { get; }
-        public StatementSyntax Statement { get; }
+        public StatementSyntax Body { get; }
 
         public override SyntaxKind Kind => SyntaxKind.WhileStatement;
     }

@@ -1,10 +1,13 @@
 ﻿namespace CodeAnalysis.Binding.Nodes
 {
-    internal sealed class BoundDoWhileStatement : BoundStatement
+    internal sealed class BoundDoWhileStatement : BoundLoopStatement
     {
         public BoundDoWhileStatement(
             BoundStatement body,
-            BoundExpression condition)
+            BoundExpression condition,
+            BoundLabel breakLabel,
+            BoundLabel continueLabel)
+            : base(breakLabel, continueLabel)
         {
             Body = body;
             Condition = condition;

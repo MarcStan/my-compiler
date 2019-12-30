@@ -2,13 +2,16 @@
 
 namespace CodeAnalysis.Binding.Nodes
 {
-    internal sealed class BoundForStatement : BoundStatement
+    internal sealed class BoundForStatement : BoundLoopStatement
     {
         public BoundForStatement(
             VariableSymbol variable,
             BoundExpression lowerBound,
             BoundExpression upperBound,
-            BoundStatement body)
+            BoundStatement body,
+            BoundLabel breakLabel,
+            BoundLabel continueLabel)
+            : base(breakLabel, continueLabel)
         {
             Variable = variable;
             LowerBound = lowerBound;

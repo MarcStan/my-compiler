@@ -20,38 +20,38 @@ Supported features:
 
 ## Example commands
 
-> (a = 5) * 5
-> 
+``` csharp
+(a = 5) * 5
 > 25
 
-> 1 + 2 * 3
-> 
+1 + 2 * 3
 > 7
 
-> false || 1 * (3 - 2) == 1
-> 
+false || 1 * (3 - 2) == 1
 > True
 
-> let x = 10
->
+let x = 10
 > 10
 
-> var y = 5
->
+var y = 5
 > 5
+```
 
-> {
->   for int i = 0 to 10
->   {
->     if i == 10 break
->     if i / 2 * 2 == 0 continue
->     print(string(i))
->   }
-> }
-
-> function hi(name: string)
-> {
->   print("What's your name?")
->   let name = input()
->   print("Hello " + name)
-> }
+``` csharp
+{
+  for int i = 0 to 10
+  {
+    if i == 10 break
+    if i / 2 * 2 == 0 continue
+    print(string(i))
+  }
+}
+```
+``` csharp
+function hi(name: string)
+{
+  print("What's your name?")
+  let name = input()
+  print("Hello " + name)
+}
+```

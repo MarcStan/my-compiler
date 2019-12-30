@@ -58,6 +58,8 @@
         ForKeyword,
         ToKeyword,
         FunctionKeyword,
+        BreakKeyword,
+        ContinueKeyword,
 
         // nodes
         CompilationUnit,

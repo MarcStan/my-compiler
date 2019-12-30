@@ -66,6 +66,8 @@ namespace CodeAnalysis.Syntax
                 "while" => SyntaxKind.WhileKeyword,
                 "do" => SyntaxKind.DoKeyword,
                 "function" => SyntaxKind.FunctionKeyword,
+                "break" => SyntaxKind.BreakKeyword,
+                "continue" => SyntaxKind.ContinueKeyword,
                 _ => SyntaxKind.IdentifierToken,
             };
 
@@ -107,6 +109,8 @@ namespace CodeAnalysis.Syntax
                 SyntaxKind.DoKeyword => "do",
                 SyntaxKind.WhileKeyword => "while",
                 SyntaxKind.LetKeyword => "let",
+                SyntaxKind.BreakKeyword => "break",
+                SyntaxKind.ContinueKeyword => "continue",
                 _ => null
             };
 

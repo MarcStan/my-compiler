@@ -16,6 +16,7 @@ Supported features:
 * mathematical operations
 * paranthesis & operator precedence support
 * if, while & for loop support
+* functions
 
 ## Example commands
 
@@ -38,3 +39,19 @@ Supported features:
 > var y = 5
 >
 > 5
+
+> {
+>   for int i = 0 to 10
+>   {
+>     if i == 10 break
+>     if i / 2 * 2 == 0 continue
+>     print(string(i))
+>   }
+> }
+
+> function hi(name: string)
+> {
+>   print("What's your name?")
+>   let name = input()
+>   print("Hello " + name)
+> }

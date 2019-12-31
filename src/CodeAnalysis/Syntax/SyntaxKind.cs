@@ -60,6 +60,7 @@
         FunctionKeyword,
         BreakKeyword,
         ContinueKeyword,
+        ReturnKeyword,
 
         // nodes
         CompilationUnit,
@@ -77,6 +78,7 @@
         GlobalStatement,
         BreakStatement,
         ContinueStatement,
+        ReturnStatement,
 
         VariableDeclaration,
         FunctionDeclaration,

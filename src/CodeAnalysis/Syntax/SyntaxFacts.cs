@@ -68,6 +68,7 @@ namespace CodeAnalysis.Syntax
                 "function" => SyntaxKind.FunctionKeyword,
                 "break" => SyntaxKind.BreakKeyword,
                 "continue" => SyntaxKind.ContinueKeyword,
+                "return" => SyntaxKind.ReturnKeyword,
                 _ => SyntaxKind.IdentifierToken,
             };
 
@@ -111,6 +112,7 @@ namespace CodeAnalysis.Syntax
                 SyntaxKind.LetKeyword => "let",
                 SyntaxKind.BreakKeyword => "break",
                 SyntaxKind.ContinueKeyword => "continue",
+                SyntaxKind.ReturnKeyword => "return",
                 _ => null
             };
 

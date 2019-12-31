@@ -51,6 +51,7 @@ namespace CodeAnalysis.Binding
             if (_functions == null)
                 _functions = new Dictionary<string, FunctionSymbol>();
 
+            
             if (_functions.ContainsKey(function.Name))
                 return false;
 

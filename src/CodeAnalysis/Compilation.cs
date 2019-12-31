@@ -1,6 +1,7 @@
 ﻿using CodeAnalysis.Binding;
 using CodeAnalysis.Symbols;
 using CodeAnalysis.Syntax;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -53,6 +54,18 @@ namespace CodeAnalysis
                 return new EvaluationResult(diag, null);
 
             var program = Binder.BindProgram(GlobalScope);
+
+            var appPath = Environment.GetCommandLineArgs()[0];
+            var appDir = Path.GetDirectoryName(appPath);
+            var cfgPath = Path.Combine(appDir, "cfg.dot");
+            var cfgStatement = !program.Statement.Statements.Any() && program.Functions.Any() ?
+                program.Functions.Last().Value :
+                program.Statement;
+
+            var cfg = ControlFlowGraph.Create(cfgStatement);
+            using (var writer = new StreamWriter(cfgPath))
+                cfg.WriteTo(writer);
+
             if (program.Diagnostics.Any())
                 return new EvaluationResult(program.Diagnostics, null);
 

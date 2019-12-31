@@ -72,6 +72,10 @@ namespace CodeAnalysis.Binding
                     var binder = new Binder(parent, func);
                     var body = binder.BindStatement(func.Declaration.Body);
                     var loweredBody = Lowerer.Lower(body);
+
+                    if (func.ReturnType != TypeSymbol.Void && !ControlFlowGraph.AllPathReturn(loweredBody))
+                        binder.Diagnostics.ReportAllPathsMustReturn(func.Declaration.Identifier.Span);
+
                     functionBodies.Add(func, loweredBody);
 
                     diagnostics.AddRange(binder.Diagnostics);

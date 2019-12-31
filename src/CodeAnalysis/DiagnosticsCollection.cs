@@ -66,6 +66,9 @@ namespace CodeAnalysis
         public void ReportUndefinedFunction(TextSpan span, string text)
             => Report(span, $"Undefined function '{text}'.");
 
+        public void ReportAllPathsMustReturn(TextSpan span)
+            => Report(span, "Not all path return a value.");
+
         public void ReportWrongArgumentCount(TextSpan span, string name, int expected, int actual)
             => Report(span, $"Function '{name}' requires {expected} arguments but was given {actual}.");
 

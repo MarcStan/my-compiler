@@ -104,9 +104,6 @@ namespace CodeAnalysis.Binding
 
             var funcType = BindTypeClause(syntax.Type) ?? TypeSymbol.Void;
 
-            if (funcType != TypeSymbol.Void)
-                Diagnostics.ReportFunctionsAreUnsupported(syntax.Type.Span);
-
             var func = new FunctionSymbol(syntax.Identifier.Text, parameters.ToImmutable(), funcType, syntax);
 
             if (!_scope.TryDeclareFunction(func))
@@ -213,8 +210,35 @@ namespace CodeAnalysis.Binding
                 SyntaxKind.WhileStatement => BindWhileStatement((WhileStatementSyntax)syntax),
                 SyntaxKind.BreakStatement => BindBreakStatement((BreakStatementSyntax)syntax),
                 SyntaxKind.ContinueStatement => BindContinueStatement((ContinueStatementSyntax)syntax),
+                SyntaxKind.ReturnStatement => BindReturnStatement((ReturnStatementSyntax)syntax),
                 _ => throw new ArgumentException($"Unexpected syntax {syntax.Kind}"),
             };
+
+        private BoundStatement BindReturnStatement(ReturnStatementSyntax syntax)
+        {
+            var expression = syntax.Expression == null ? null : BindExpression(syntax.Expression);
+
+            if (_function == null)
+            {
+                Diagnostics.ReportInvalidReturn(syntax.Expression.Span);
+            }
+            else
+            {
+                if (_function.ReturnType == TypeSymbol.Void)
+                {
+                    if (expression != null)
+                        Diagnostics.ReportInvalidReturnExpression(syntax.Expression.Span, _function.Name);
+                }
+                else
+                {
+                    if (expression == null)
+                        Diagnostics.ReportMissingReturnExpression(syntax.ReturnKeyword.Span, _function.ReturnType);
+
+                    expression = BindConversion(syntax.Expression.Span, expression, _function.ReturnType);
+                }
+            }
+            return new BoundReturnStatement(expression);
+        }
 
         private BoundStatement BindContinueStatement(ContinueStatementSyntax syntax)
         {

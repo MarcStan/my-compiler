@@ -63,6 +63,9 @@ namespace CodeAnalysis
                     case BoundNodeKind.GoToStatement:
                         index = labelToIndex[((BoundGoToStatement)s).Label];
                         break;
+                    case BoundNodeKind.ReturnStatement:
+                        var rs = (BoundReturnStatement)s;
+                        return _lastValue = rs.Expression == null ? null : EvaluateExpression(rs.Expression);
                     case BoundNodeKind.LabelStatement:
                         break;
                     default:
@@ -71,6 +74,7 @@ namespace CodeAnalysis
             }
             return _lastValue;
         }
+
 
         private void EvaluateVariableDeclaration(BoundVariableDeclaration node)
         {

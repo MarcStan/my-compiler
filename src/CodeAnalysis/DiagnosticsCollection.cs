@@ -60,9 +60,6 @@ namespace CodeAnalysis
         public void ReportUnterminatedString(TextSpan span)
             => Report(span, "Unterminated string literal.");
 
-        public void ReportFunctionsAreUnsupported(TextSpan span)
-            => Report(span, "Functions with return types are not yet supported.");
-
         public void ReportFunctionAlreadyDeclared(TextSpan span, string name)
             => Report(span, $"Function '{name}' already declared.");
 
@@ -80,5 +77,14 @@ namespace CodeAnalysis
 
         public void ReportInvalidBreakOrContinue(TextSpan span, string text)
             => Report(span, $"The keyword {text} can only be used in loops.");
+
+        public void ReportInvalidReturnExpression(TextSpan span, string text)
+            => Report(span, $"Method '{text}' is of type void and cannot return value.");
+
+        public void ReportMissingReturnExpression(TextSpan span, TypeSymbol type)
+            => Report(span, $"Missing {type} return value.");
+
+        public void ReportInvalidReturn(TextSpan span)
+            => Report(span, "Return keyword is invalid outside methods.");
     }
 }

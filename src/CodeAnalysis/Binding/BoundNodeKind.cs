@@ -14,6 +14,7 @@
         GoToStatement,
         LabelStatement,
         ConditionalGoToStatement,
+        ReturnStatement,
 
         VariableDeclaration,
 

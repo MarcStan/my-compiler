@@ -32,6 +32,7 @@ namespace CodeAnalysis.Binding
                 BoundNodeKind.WhileStatement => RewriteWhileStatement((BoundWhileStatement)node),
                 BoundNodeKind.LabelStatement => RewriteLabelStatement((BoundLabelStatement)node),
                 BoundNodeKind.GoToStatement => RewriteGoToStatement((BoundGoToStatement)node),
+                BoundNodeKind.ReturnStatement => RewriteReturnStatement((BoundReturnStatement)node),
                 BoundNodeKind.ConditionalGoToStatement => RewriteConditionalGoToStatement((BoundConditionalGoToStatement)node),
                 _ => throw new ArgumentException($"Cannot rewrite {node.Kind}")
             };
@@ -70,6 +71,15 @@ namespace CodeAnalysis.Binding
                 return node;
 
             return new BoundCallExpression(node.Function, builder.MoveToImmutable());
+        }
+
+        protected virtual BoundStatement RewriteReturnStatement(BoundReturnStatement node)
+        {
+            var expression = node.Expression == null ? null : RewriteExpression(node.Expression);
+            if (expression == node.Expression)
+                return node;
+
+            return new BoundReturnStatement(expression);
         }
 
         protected virtual BoundStatement RewriteConditionalGoToStatement(BoundConditionalGoToStatement node)

@@ -88,6 +88,20 @@ namespace CodeAnalysis.Tests
         }
 
         [Test]
+        public void Function_should_evaluate_correctly()
+        {
+            var syntaxTree = SyntaxTree.Parse("function sum(a: int, b: int): int { return a + b }");
+            var comp = new Compilation(syntaxTree);
+            var evalComp = new Compilation(SyntaxTree.Parse("sum(2, 8)"), comp);
+            var variables = new Dictionary<VariableSymbol, object>();
+
+            var actual = evalComp.Evaluate(variables);
+
+            actual.Diagnostics.Should().BeEmpty();
+            actual.Value.Should().Be(10);
+        }
+
+        [Test]
         public void DoWhile_should_report_type_mismatch_when_condition_is_not_of_type_bool()
         {
             var text = @"

@@ -11,4 +11,4 @@ jobs:
     - name: build
       run: dotnet build -c Release
     - name: test
-      run: dotnet test -c Release --no-build **/*.Test*.csproj
+      run: dotnet test -c Release --no-build src/**/*.Test*.csproj

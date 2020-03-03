@@ -1,0 +1,14 @@
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+    - name: build
+      run: dotnet build -c Release
+    - name: test
+      run: dotnet test -c Release --no-build **/*.Test*.csproj
